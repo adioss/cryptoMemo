@@ -1,6 +1,6 @@
-package com.adioss.security;
+package com.adioss.security.symmetric;
 
-import com.adioss.security.symmetric.SymmetricEncryptTools;
+import com.adioss.security.Utils;
 
 import javax.crypto.*;
 import javax.crypto.spec.IvParameterSpec;

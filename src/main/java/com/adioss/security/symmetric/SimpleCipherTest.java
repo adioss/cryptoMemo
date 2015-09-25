@@ -1,4 +1,4 @@
-package com.adioss.security;
+package com.adioss.security.symmetric;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;

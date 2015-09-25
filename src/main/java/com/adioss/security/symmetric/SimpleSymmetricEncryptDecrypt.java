@@ -13,6 +13,10 @@ import java.security.InvalidKeyException;
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 
+/**
+ * Simple symmetric test with input/output files. Best entry point to show how symmetric crypto works.
+ * {@see com.adioss.security.symmetric.SimpleSymmetricEncryptDecryptTest}
+ */
 public class SimpleSymmetricEncryptDecrypt {
 
     public void encrypt(File inputFile, File outputFile, byte[] key, String algorithm, String transformation) {
