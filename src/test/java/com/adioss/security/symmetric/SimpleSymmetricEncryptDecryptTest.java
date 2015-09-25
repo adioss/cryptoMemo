@@ -13,7 +13,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 public class SimpleSymmetricEncryptDecryptTest {
-    private static final String CLEAR_FILE_NAME = "/clearFile.txt";
+    private static final String CLEAR_FILE_NAME = "/inputFile.txt";
     private static final String ENCRYPTED_FILE_NAME = "/encryptedFile.txt";
     private static final String TEMP_FILE_NAME = "/outputFile.txt";
     // key size must be 16 or 128 for AES
