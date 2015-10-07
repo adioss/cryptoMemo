@@ -1,11 +1,11 @@
 package com.adioss.security;
 
-import javax.crypto.KeyGenerator;
-import javax.crypto.spec.IvParameterSpec;
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.SecureRandom;
+import javax.crypto.*;
+import javax.crypto.spec.*;
 
 public class Utils {
     private final static String DIGITS = "0123456789abcdef";
@@ -57,9 +57,13 @@ public class Utils {
         return new IvParameterSpec(ivBytes);
     }
 
-    public static Key createKeyForAES(int i, SecureRandom random) throws NoSuchProviderException, NoSuchAlgorithmException {
+    public static Key createKeyForAES(SecureRandom random) throws NoSuchProviderException, NoSuchAlgorithmException {
+        return createKeyForAES(256, random);
+    }
+
+    public static Key createKeyForAES(int bitLength, SecureRandom random) throws NoSuchProviderException, NoSuchAlgorithmException {
         KeyGenerator generator = KeyGenerator.getInstance("AES", "BC");
-        generator.init(256, random);
+        generator.init(bitLength, random);
         return generator.generateKey();
     }
 
