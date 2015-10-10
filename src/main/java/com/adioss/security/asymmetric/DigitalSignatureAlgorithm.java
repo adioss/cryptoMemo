@@ -1,11 +1,12 @@
 package com.adioss.security.asymmetric;
 
+import com.adioss.security.Utils;
+
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.SecureRandom;
 import java.security.Signature;
 import java.security.spec.ECGenParameterSpec;
-import com.adioss.security.Utils;
 
 public class DigitalSignatureAlgorithm {
     /**

@@ -1,11 +1,11 @@
 package com.adioss.security;
 
+import javax.crypto.KeyGenerator;
+import javax.crypto.spec.IvParameterSpec;
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.SecureRandom;
-import javax.crypto.*;
-import javax.crypto.spec.*;
 
 public class Utils {
     private final static String DIGITS = "0123456789abcdef";

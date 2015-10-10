@@ -1,15 +1,11 @@
 package com.adioss.security.digest;
 
-import java.security.InvalidAlgorithmParameterException;
-import java.security.InvalidKeyException;
-import java.security.Key;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
-import java.security.SecureRandom;
-import javax.crypto.*;
-import javax.crypto.spec.*;
 import com.adioss.security.Utils;
+
+import javax.crypto.*;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
+import java.security.*;
 
 public class Digest {
     private static final SecureRandom SECURE_RANDOM = new SecureRandom();
@@ -23,7 +19,7 @@ public class Digest {
      */
     private static void encryptDecryptWithDigest()
             throws NoSuchProviderException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, InvalidAlgorithmParameterException,
-                   ShortBufferException, IllegalBlockSizeException, BadPaddingException {
+            ShortBufferException, IllegalBlockSizeException, BadPaddingException {
 
         IvParameterSpec ivParameterSpec = Utils.createIvForAES(1, SECURE_RANDOM);
         Key key = Utils.createKeyForAES(SECURE_RANDOM);
@@ -62,7 +58,7 @@ public class Digest {
      */
     private static void encryptDecryptWithHMac()
             throws NoSuchProviderException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, InvalidAlgorithmParameterException,
-                   ShortBufferException, IllegalBlockSizeException, BadPaddingException {
+            ShortBufferException, IllegalBlockSizeException, BadPaddingException {
         SecureRandom random = new SecureRandom();
         IvParameterSpec ivSpec = Utils.createIvForAES(1, random);
         Key key = Utils.createKeyForAES(256, random);
