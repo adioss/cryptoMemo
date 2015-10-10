@@ -25,7 +25,7 @@ public class Digest {
             throws NoSuchProviderException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, InvalidAlgorithmParameterException,
                    ShortBufferException, IllegalBlockSizeException, BadPaddingException {
 
-        IvParameterSpec ivParameterSpec = Utils.createCtrIvForAES(1, SECURE_RANDOM);
+        IvParameterSpec ivParameterSpec = Utils.createIvForAES(1, SECURE_RANDOM);
         Key key = Utils.createKeyForAES(SECURE_RANDOM);
         String input = "Validate with digested data.....";
         MessageDigest messageDigest = MessageDigest.getInstance("SHA-1", "BC");
@@ -64,7 +64,7 @@ public class Digest {
             throws NoSuchProviderException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, InvalidAlgorithmParameterException,
                    ShortBufferException, IllegalBlockSizeException, BadPaddingException {
         SecureRandom random = new SecureRandom();
-        IvParameterSpec ivSpec = Utils.createCtrIvForAES(1, random);
+        IvParameterSpec ivSpec = Utils.createIvForAES(1, random);
         Key key = Utils.createKeyForAES(256, random);
         String input = "Validate with digested data.....";
         System.out.println("input : " + input);

@@ -40,7 +40,7 @@ public class Utils {
         return toHex(data, data.length);
     }
 
-    public static IvParameterSpec createCtrIvForAES(int messageNumber, SecureRandom random) {
+    public static IvParameterSpec createIvForAES(int messageNumber, SecureRandom random) {
         byte[] ivBytes = new byte[16];
         // initially randomize
         random.nextBytes(ivBytes);
@@ -82,5 +82,9 @@ public class Utils {
             chars[i] = (char) (bytes[i] & 0xff);
         }
         return new String(chars);
+    }
+
+    public static SecureRandom createFixedRandom() {
+        throw new RuntimeException("Need to be implemented... or not");
     }
 }
