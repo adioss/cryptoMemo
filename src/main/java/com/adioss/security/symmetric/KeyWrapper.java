@@ -17,16 +17,16 @@ public class KeyWrapper {
      * Create another key, use a cipher with it and {@link Cipher#WRAP_MODE} and wrap the original key
      * To unwrap, use a cipher with {@link Cipher#UNWRAP_MODE}
      */
-    private static void wrapUnwrapKey() throws NoSuchAlgorithmException, NoSuchProviderException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException {
+    public static void wrapUnwrapKey() throws NoSuchAlgorithmException, NoSuchProviderException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException {
         // create a key to wrap
-        KeyGenerator generator = KeyGenerator.getInstance("AES", "BC");
+        KeyGenerator generator = KeyGenerator.getInstance("AES");
         generator.init(128);
         Key keyToBeWrapped = generator.generateKey();
         System.out.println("input    : " + Utils.toHex(keyToBeWrapped.getEncoded()));
 
         // create a wrapper and do the wrapping
-        Cipher cipher = Cipher.getInstance("AESWrap", "BC");
-        KeyGenerator keyGenerator = KeyGenerator.getInstance("AES", "BC");
+        Cipher cipher = Cipher.getInstance("AESWrap");
+        KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
         keyGenerator.init(256);
         Key wrapKey = keyGenerator.generateKey();
         cipher.init(Cipher.WRAP_MODE, wrapKey);

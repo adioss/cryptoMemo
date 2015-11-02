@@ -1,15 +1,12 @@
 package com.adioss.security.symmetric;
 
-import javax.crypto.Cipher;
-import javax.crypto.SecretKey;
+import javax.crypto.*;
 import javax.crypto.spec.SecretKeySpec;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 
 public class SimpleCipherTest {
-    /**
-     * remark: without jce unlimited, key192 will not work
-     * => http://www.oracle.com/technetwork/java/javase/downloads/jce8-download-2133166.html
-     */
-    public static void main(String[] args) throws Exception {
+    public static void test() throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
         byte[] data = {0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07};
 
         // create a 64 bit(8 bytes) secret key from raw bytes
@@ -36,6 +33,14 @@ public class SimpleCipherTest {
 
 
         System.out.println("Tests completed");
+    }
+
+    /**
+     * remark: without jce unlimited, key192 will not work
+     * => http://www.oracle.com/technetwork/java/javase/downloads/jce8-download-2133166.html
+     */
+    public static void main(String[] args) throws Exception {
+        test();
     }
 
 }
