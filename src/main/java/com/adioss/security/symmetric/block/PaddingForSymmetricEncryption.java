@@ -12,7 +12,7 @@ public class PaddingForSymmetricEncryption {
     /**
      * Symmetric encrypt by block with PKCS7 padding
      */
-    private static void encryptWithPadding() throws NoSuchPaddingException, NoSuchAlgorithmException, NoSuchProviderException, InvalidKeyException, ShortBufferException, BadPaddingException, IllegalBlockSizeException {
+    public static void encryptWithPadding() throws NoSuchPaddingException, NoSuchAlgorithmException, NoSuchProviderException, InvalidKeyException, ShortBufferException, BadPaddingException, IllegalBlockSizeException {
         byte[] input = new byte[]{
                 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
                 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f,
@@ -23,7 +23,7 @@ public class PaddingForSymmetricEncryption {
                 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17};
         SecretKeySpec key = new SecretKeySpec(keyBytes, "AES");
         // here select PKCS7 padding
-        Cipher cipher = Cipher.getInstance("AES/ECB/PKCS7Padding", "BC");
+        Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
         System.out.println("input : " + Utils.toHex(input));
 
         // encryption pass

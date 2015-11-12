@@ -2,14 +2,11 @@ package com.adioss.security.symmetric.block;
 
 import com.adioss.security.Utils;
 
-import javax.crypto.*;
+import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
 
-public class SymmetricEncryption {
-    private static void encryptWithSimpleSymmetricEncryption() throws NoSuchAlgorithmException, NoSuchProviderException, NoSuchPaddingException, InvalidKeyException, ShortBufferException, IllegalBlockSizeException, BadPaddingException {
+public class SymmetricBlockEncryption {
+    public static void encryptWithSimpleSymmetricEncryption() throws Exception {
         byte[] input = new byte[]{
                 0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77,
                 (byte) 0x88, (byte) 0x99, (byte) 0xaa, (byte) 0xbb,
@@ -20,7 +17,7 @@ public class SymmetricEncryption {
                 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17};
 
         SecretKeySpec key = new SecretKeySpec(keyBytes, "AES");
-        Cipher cipher = Cipher.getInstance("AES/ECB/NoPadding", "BC");
+        Cipher cipher = Cipher.getInstance("AES/ECB/NoPadding");
         System.out.println("input text : " + Utils.toHex(input));
 
         // encryption pass

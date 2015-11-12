@@ -7,7 +7,7 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.security.*;
 
-import static com.adioss.security.symmetric.SymmetricEncryptTools.INPUT;
+import static com.adioss.security.symmetric.SymmetricEncryptConstant.INPUT;
 
 public class KeyGeneration {
     /**

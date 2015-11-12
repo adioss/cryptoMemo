@@ -1,24 +1,26 @@
 package com.adioss.security.symmetric.block;
 
-import javax.crypto.*;
+import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
-import java.security.*;
+import java.security.SecureRandom;
 
-import static com.adioss.security.symmetric.SymmetricEncryptTools.*;
+import static com.adioss.security.symmetric.SymmetricEncryptConstant.INPUT;
+import static com.adioss.security.symmetric.SymmetricEncryptTools.encryptDecryptWithIV;
+import static com.adioss.security.symmetric.SymmetricEncryptTools.simpleEncryptDecrypt;
 
 public class ModeForSymmetricEncryption {
     /**
      * Symmetric encrypt by block with ECB mode: PKCS7 Padding using DES cipher
      * Problem: show that we can discovering patterns
      */
-    private static void encryptWithECB() throws NoSuchPaddingException, NoSuchAlgorithmException, NoSuchProviderException, InvalidKeyException, ShortBufferException, BadPaddingException, IllegalBlockSizeException {
+    public static void encryptWithECB() throws Exception {
         System.out.println("encryptWithECB");
         byte[] keyBytes = new byte[]{0x01, 0x23, 0x45, 0x67, (byte) 0x89, (byte) 0xab, (byte) 0xcd, (byte) 0xef};
 
         SecretKeySpec key = new SecretKeySpec(keyBytes, "DES");
         // here ECB
-        Cipher cipher = Cipher.getInstance("DES/ECB/PKCS7Padding", "BC");
+        Cipher cipher = Cipher.getInstance("DES/ECB/PKCS5Padding");
 
         simpleEncryptDecrypt(INPUT, key, cipher);
         // print cipher: 3260266c2cf202e28325790654a444d93260266c2cf202e2086f9a1d74c94d4e bytes: 32
@@ -28,7 +30,7 @@ public class ModeForSymmetricEncryption {
     /**
      * Symmetric encrypt by block with CBC mode: PKCS7 Padding using DES cipher and IV
      */
-    private static void encryptWithCBC() throws NoSuchPaddingException, NoSuchAlgorithmException, NoSuchProviderException, InvalidKeyException, ShortBufferException, BadPaddingException, IllegalBlockSizeException, InvalidAlgorithmParameterException {
+    public static void encryptWithCBC() throws Exception {
         System.out.println("encryptWithCBC");
         byte[] keyBytes = new byte[]{0x01, 0x23, 0x45, 0x67, (byte) 0x89, (byte) 0xab, (byte) 0xcd, (byte) 0xef};
         byte[] ivBytes = new byte[]{0x07, 0x06, 0x05, 0x04, 0x03, 0x02, 0x01, 0x00};
@@ -36,7 +38,7 @@ public class ModeForSymmetricEncryption {
         SecretKeySpec key = new SecretKeySpec(keyBytes, "DES");
         // used to init cipher
         IvParameterSpec ivSpec = new IvParameterSpec(ivBytes);
-        Cipher cipher = Cipher.getInstance("DES/CBC/PKCS7Padding", "BC");
+        Cipher cipher = Cipher.getInstance("DES/CBC/PKCS5Padding");
 
         encryptDecryptWithIV(INPUT, key, ivSpec, cipher);
     }
@@ -44,7 +46,7 @@ public class ModeForSymmetricEncryption {
     /**
      * Symmetric encrypt by block with CBC mode: PKCS7 Padding using DES cipher and secure random IV
      */
-    private static void encryptWithCBCWithSecureRandomIV() throws NoSuchPaddingException, NoSuchAlgorithmException, NoSuchProviderException, InvalidKeyException, ShortBufferException, BadPaddingException, IllegalBlockSizeException, InvalidAlgorithmParameterException {
+    public static void encryptWithCBCWithSecureRandomIV() throws Exception {
         System.out.println("encryptWithCBCWithSecureRandomIV");
         byte[] keyBytes = new byte[]{0x01, 0x23, 0x45, 0x67, (byte) 0x89, (byte) 0xab, (byte) 0xcd, (byte) 0xef};
         byte[] ivBytes = new byte[8];
@@ -54,7 +56,7 @@ public class ModeForSymmetricEncryption {
         SecureRandom secureRandom = new SecureRandom();
         secureRandom.nextBytes(ivBytes);
         IvParameterSpec ivSpec = new IvParameterSpec(ivBytes);
-        Cipher cipher = Cipher.getInstance("DES/CBC/PKCS7Padding", "BC");
+        Cipher cipher = Cipher.getInstance("DES/CBC/PKCS5Padding");
         // secure random can be done by calling cipher method too
         // see => IvParameterSpec ivSpec = new IvParameterSpec(cipher.getIV());
         encryptDecryptWithIV(INPUT, key, ivSpec, cipher);
@@ -64,7 +66,7 @@ public class ModeForSymmetricEncryption {
     /**
      * Symmetric encrypt by block with CTS mode: no padding using DES cipher and IV
      */
-    private static void encryptWithCTS() throws NoSuchPaddingException, NoSuchAlgorithmException, NoSuchProviderException, InvalidKeyException, ShortBufferException, BadPaddingException, IllegalBlockSizeException, InvalidAlgorithmParameterException {
+    public static void encryptWithCTS() throws Exception {
         System.out.println("encryptWithCTS");
         byte[] keyBytes = new byte[]{0x01, 0x23, 0x45, 0x67, (byte) 0x89, (byte) 0xab, (byte) 0xcd, (byte) 0xef};
         byte[] ivBytes = new byte[]{0x07, 0x06, 0x05, 0x04, 0x03, 0x02, 0x01, 0x00};
@@ -72,7 +74,7 @@ public class ModeForSymmetricEncryption {
         SecretKeySpec key = new SecretKeySpec(keyBytes, "DES");
         // used to init cipher
         IvParameterSpec ivSpec = new IvParameterSpec(ivBytes);
-        Cipher cipher = Cipher.getInstance("DES/CTS/NoPadding", "BC");
+        Cipher cipher = Cipher.getInstance("DES/CTS/NoPadding");
 
         encryptDecryptWithIV(INPUT, key, ivSpec, cipher);
     }
@@ -80,7 +82,7 @@ public class ModeForSymmetricEncryption {
     /**
      * Symmetric encrypt by block with CTR mode: no padding using DES cipher and IV
      */
-    private static void encryptWithCTR() throws NoSuchPaddingException, NoSuchAlgorithmException, NoSuchProviderException, InvalidKeyException, ShortBufferException, BadPaddingException, IllegalBlockSizeException, InvalidAlgorithmParameterException {
+    public static void encryptWithCTR() throws Exception {
         System.out.println("encryptWithCBC");
         byte[] keyBytes = new byte[]{0x01, 0x23, 0x45, 0x67, (byte) 0x89, (byte) 0xab, (byte) 0xcd, (byte) 0xef};
         byte[] ivBytes = new byte[]{0x07, 0x06, 0x05, 0x04, 0x03, 0x02, 0x01, 0x00};
@@ -88,7 +90,7 @@ public class ModeForSymmetricEncryption {
         SecretKeySpec key = new SecretKeySpec(keyBytes, "DES");
         // used to init cipher
         IvParameterSpec ivSpec = new IvParameterSpec(ivBytes);
-        Cipher cipher = Cipher.getInstance("DES/CTR/NoPadding", "BC");
+        Cipher cipher = Cipher.getInstance("DES/CTR/NoPadding");
 
         encryptDecryptWithIV(INPUT, key, ivSpec, cipher);
     }
