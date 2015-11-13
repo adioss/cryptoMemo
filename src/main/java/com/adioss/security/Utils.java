@@ -62,7 +62,7 @@ public class Utils {
     }
 
     public static Key createKeyForAES(int bitLength, SecureRandom random) throws NoSuchProviderException, NoSuchAlgorithmException {
-        KeyGenerator generator = KeyGenerator.getInstance("AES", "BC");
+        KeyGenerator generator = KeyGenerator.getInstance("AES");
         generator.init(bitLength, random);
         return generator.generateKey();
     }

@@ -25,7 +25,7 @@ public class SimpleSymmetricEncryptDecryptTest {
     public TemporaryFolder testFolder = new TemporaryFolder();
 
     @Test
-    public void testEncrypt() throws Exception {
+    public void shouldSymmetricEncryptDecrypt() throws Exception {
         // Given
         File inputFile = loadFile(CLEAR_FILE_NAME);
         File outputFile = testFolder.newFile(TEMP_FILE_NAME);

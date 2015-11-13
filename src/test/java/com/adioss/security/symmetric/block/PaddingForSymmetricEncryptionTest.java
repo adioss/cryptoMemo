@@ -5,7 +5,7 @@ import org.junit.Test;
 
 public class PaddingForSymmetricEncryptionTest {
     @Test
-    public void shouldValidateEncryptWithPaddingException() {
+    public void shouldValidateEncryptWithPaddingWithoutException() {
         try {
             PaddingForSymmetricEncryption.encryptWithPadding();
         } catch (Exception e) {
