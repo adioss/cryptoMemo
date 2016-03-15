@@ -24,7 +24,7 @@ public class DHAlgorithm {
      * - the private key from the other
      * - each other public key
      */
-    private static void createKeysByKeyAgreementWithDH() throws Exception {
+    public static void createKeysByKeyAgreementWithDH() throws Exception {
         BigInteger g512 = new BigInteger("153d5d6172adb43045b68ae8e1de1070b6137005686d29d3d73a7" +
                 "749199681ee5b212c9b96bfdcfa5b20cd5e3fd2044895d609cf9b" +
                 "410b7a0f12ca1cb9a428cc", 16);
@@ -33,13 +33,13 @@ public class DHAlgorithm {
                 "f0573bf047a3aca98cdf3b", 16);
 
         DHParameterSpec dhParameterSpec = new DHParameterSpec(p512, g512);
-        KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("DH", "BC");
+        KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("DH");
         keyPairGenerator.initialize(dhParameterSpec, Utils.createFixedRandom());
 
         // set up
-        KeyAgreement aKeyAgree = KeyAgreement.getInstance("DH", "BC");
+        KeyAgreement aKeyAgree = KeyAgreement.getInstance("DH");
         KeyPair aPair = keyPairGenerator.generateKeyPair();
-        KeyAgreement bKeyAgree = KeyAgreement.getInstance("DH", "BC");
+        KeyAgreement bKeyAgree = KeyAgreement.getInstance("DH");
         KeyPair bPair = keyPairGenerator.generateKeyPair();
 
         // two party agreement
@@ -50,7 +50,7 @@ public class DHAlgorithm {
         bKeyAgree.doPhase(aPair.getPublic(), true);
 
         // generate the key bytes
-        MessageDigest hash = MessageDigest.getInstance("SHA1", "BC");
+        MessageDigest hash = MessageDigest.getInstance("SHA1");
         byte[] aShared = hash.digest(aKeyAgree.generateSecret());
         byte[] bShared = hash.digest(bKeyAgree.generateSecret());
 
@@ -61,8 +61,8 @@ public class DHAlgorithm {
     /**
      * Elliptic Curve Diffie Hellman
      */
-    private static void createKeysByKeyAgreementWithECDH() throws Exception {
-        KeyPairGenerator keyGen = KeyPairGenerator.getInstance("ECDH", "BC");
+    public static void createKeysByKeyAgreementWithECDH() throws Exception {
+        KeyPairGenerator keyGen = KeyPairGenerator.getInstance("ECDH");
         EllipticCurve curve = new EllipticCurve(new ECFieldFp(new BigInteger("fffffffffffffffffffffffffffffffeffffffffffffffff", 16)),
                 new BigInteger("fffffffffffffffffffffffffffffffefffffffffffffffc", 16),
                 new BigInteger("64210519e59c80e70fa7e9ab72243049feb8deecc146b9b1", 16));
@@ -74,9 +74,9 @@ public class DHAlgorithm {
         keyGen.initialize(ecSpec, Utils.createFixedRandom());
 
         // set up
-        KeyAgreement aKeyAgree = KeyAgreement.getInstance("ECDH", "BC");
+        KeyAgreement aKeyAgree = KeyAgreement.getInstance("ECDH");
         KeyPair aPair = keyGen.generateKeyPair();
-        KeyAgreement bKeyAgree = KeyAgreement.getInstance("ECDH", "BC");
+        KeyAgreement bKeyAgree = KeyAgreement.getInstance("ECDH");
         KeyPair bPair = keyGen.generateKeyPair();
 
         // two party agreement
@@ -87,7 +87,7 @@ public class DHAlgorithm {
         bKeyAgree.doPhase(aPair.getPublic(), true);
 
         // generate the key bytes
-        MessageDigest hash = MessageDigest.getInstance("SHA1", "BC");
+        MessageDigest hash = MessageDigest.getInstance("SHA1");
         byte[] aShared = hash.digest(aKeyAgree.generateSecret());
         byte[] bShared = hash.digest(bKeyAgree.generateSecret());
 

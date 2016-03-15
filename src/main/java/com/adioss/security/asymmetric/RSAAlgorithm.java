@@ -19,9 +19,9 @@ import java.security.spec.RSAPublicKeySpec;
  */
 public class RSAAlgorithm {
 
-    private static void encryptDecryptWithPublicPrivateRSAKeys() throws Exception {
+    public static void encryptDecryptWithPublicPrivateRSAKeys() throws Exception {
         byte[] input = new byte[]{(byte) 0xbe, (byte) 0xef};
-        Cipher cipher = Cipher.getInstance("RSA/None/NoPadding", "BC");
+        Cipher cipher = Cipher.getInstance("RSA/None/NoPadding");
 
         // create the keys
         BigInteger modulus = new BigInteger("d46f473a2d746537de2056ae3092c451", 16);
@@ -30,7 +30,7 @@ public class RSAAlgorithm {
 
         RSAPublicKeySpec publicKeySpec = new RSAPublicKeySpec(modulus, publicExponent);
         RSAPrivateKeySpec privateKeySpec = new RSAPrivateKeySpec(modulus, privateExponent);
-        KeyFactory keyFactory = KeyFactory.getInstance("RSA", "BC");
+        KeyFactory keyFactory = KeyFactory.getInstance("RSA");
         RSAPublicKey publicKey = (RSAPublicKey) keyFactory.generatePublic(publicKeySpec);
         RSAPrivateKey privateKey = (RSAPrivateKey) keyFactory.generatePrivate(privateKeySpec);
 
@@ -51,16 +51,16 @@ public class RSAAlgorithm {
      * Pb is that input is converted to Integer so "00" are escaped on conversion so we use padding to keep them
      * Example here with PKCS1 Padding
      */
-    private static void encryptDecryptWithPublicPrivatePKCS1Padding() throws Exception {
+    public static void encryptDecryptWithPublicPrivatePKCS1Padding() throws Exception {
         // TODO try with bigger input (text or...)
         byte[] input = new byte[]{0x00, (byte) 0xbe, (byte) 0xef};
-        Cipher cipher = Cipher.getInstance("RSA/None/PKCS1Padding", "BC");
+        Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
         // TODO implement it or not
         SecureRandom random = Utils.createFixedRandom();
 
         // create the keys
-        KeyPairGenerator generator = KeyPairGenerator.getInstance("RSA", "BC");
-        generator.initialize(256, random);
+        KeyPairGenerator generator = KeyPairGenerator.getInstance("RSA");
+        generator.initialize(512, random);
         KeyPair pair = generator.generateKeyPair();
         Key publicKey = pair.getPublic();
         Key privateKey = pair.getPrivate();
@@ -78,13 +78,13 @@ public class RSAAlgorithm {
         System.out.println("plain : " + Utils.toHex(plainText));
     }
 
-    private static void encryptDecryptWithPublicPrivateOAEPPadding() throws Exception {
+    public static void encryptDecryptWithPublicPrivateOAEPPadding() throws Exception {
         byte[] input = new byte[]{0x00, (byte) 0xbe, (byte) 0xef};
-        Cipher cipher = Cipher.getInstance("RSA/None/OAEPWithSHA1AndMGF1Padding", "BC");
+        Cipher cipher = Cipher.getInstance("RSA/None/OAEPWithSHA1AndMGF1Padding");
         SecureRandom random = Utils.createFixedRandom();
 
         // create the keys
-        KeyPairGenerator generator = KeyPairGenerator.getInstance("RSA", "BC");
+        KeyPairGenerator generator = KeyPairGenerator.getInstance("RSA");
         generator.initialize(386, random);
         KeyPair pair = generator.generateKeyPair();
         Key pubKey = pair.getPublic();
@@ -103,28 +103,12 @@ public class RSAAlgorithm {
         System.out.println("plain : " + Utils.toHex(plainText));
     }
 
-    private static byte[] packKeyAndIv(Key key, IvParameterSpec ivSpec) throws IOException {
-        ByteArrayOutputStream bOut = new ByteArrayOutputStream();
-
-        bOut.write(ivSpec.getIV());
-        bOut.write(key.getEncoded());
-
-        return bOut.toByteArray();
-    }
-
-    private static Object[] unpackKeyAndIV(byte[] data) {
-        byte[] keyD = new byte[16];
-        byte[] iv = new byte[data.length - 16];
-
-        return new Object[]{new SecretKeySpec(data, 16, data.length - 16, "AES"), new IvParameterSpec(data, 0, 16)};
-    }
-
     public static void encryptDecryptAsymmetricKey() throws Exception {
         byte[] input = new byte[]{0x00, (byte) 0xbe, (byte) 0xef};
         SecureRandom random = Utils.createFixedRandom();
 
         // create the RSA Key
-        KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA", "BC");
+        KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
         keyPairGenerator.initialize(1024, random);
         KeyPair pair = keyPairGenerator.generateKeyPair();
         Key publicKey = pair.getPublic();
@@ -136,16 +120,16 @@ public class RSAAlgorithm {
         IvParameterSpec symmetricIvSpec = Utils.createIvForAES(0, random);
 
         // symmetric key/iv wrapping step
-        Cipher asymmetricCipher = Cipher.getInstance("RSA/NONE/OAEPWithSHA1AndMGF1Padding", "BC");
+        Cipher asymmetricCipher = Cipher.getInstance("RSA/NONE/OAEPWithSHA1AndMGF1Padding");
         asymmetricCipher.init(Cipher.ENCRYPT_MODE, publicKey, random);
         byte[] keyBlock = asymmetricCipher.doFinal(packKeyAndIv(symmetricKey, symmetricIvSpec));
 
         // encryption step
-        Cipher symmetricCipher = Cipher.getInstance("AES/CTR/NoPadding", "BC");
+        Cipher symmetricCipher = Cipher.getInstance("AES/CTR/NoPadding");
         symmetricCipher.init(Cipher.ENCRYPT_MODE, symmetricKey, symmetricIvSpec);
         byte[] cipherText = symmetricCipher.doFinal(input);
-        System.out.println("keyBlock length  : " + keyBlock.length);
-        System.out.println("cipherText length: " + cipherText.length);
+        System.out.println("keyBlock length : " + keyBlock.length);
+        System.out.println("cipherText length : " + cipherText.length);
 
         // symmetric key/iv unwrapping step
         asymmetricCipher.init(Cipher.DECRYPT_MODE, privateKey);
@@ -154,7 +138,20 @@ public class RSAAlgorithm {
         // decryption step
         symmetricCipher.init(Cipher.DECRYPT_MODE, (Key) keyIv[0], (IvParameterSpec) keyIv[1]);
         byte[] plainText = symmetricCipher.doFinal(cipherText);
-        System.out.println("plain            : " + Utils.toHex(plainText));
+        System.out.println("plain : " + Utils.toHex(plainText));
+    }
+
+    private static byte[] packKeyAndIv(Key key, IvParameterSpec ivSpec) throws IOException {
+        ByteArrayOutputStream bOut = new ByteArrayOutputStream();
+
+        bOut.write(ivSpec.getIV());
+        bOut.write(key.getEncoded());
+
+        return bOut.toByteArray();
+    }
+
+    private static Object[] unpackKeyAndIV(byte[] data) {
+        return new Object[]{new SecretKeySpec(data, 16, data.length - 16, "AES"), new IvParameterSpec(data, 0, 16)};
     }
 
     public static void main(String... args) throws Exception {

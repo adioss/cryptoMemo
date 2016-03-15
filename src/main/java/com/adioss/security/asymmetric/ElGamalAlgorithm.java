@@ -10,8 +10,8 @@ import java.security.spec.AlgorithmParameterSpec;
 public class ElGamalAlgorithm {
     private static void encryptDecryptWithElGamal() throws Exception {
         byte[] input = new byte[]{(byte) 0xbe, (byte) 0xef};
-        Cipher cipher = Cipher.getInstance("ElGamal/None/NoPadding", "BC");
-        KeyPairGenerator generator = KeyPairGenerator.getInstance("ElGamal", "BC");
+        Cipher cipher = Cipher.getInstance("ElGamal/None/NoPadding");
+        KeyPairGenerator generator = KeyPairGenerator.getInstance("ElGamal");
         SecureRandom random = Utils.createFixedRandom();
 
         // create the keys
@@ -35,17 +35,17 @@ public class ElGamalAlgorithm {
 
     private static void encryptDecryptWithElGamalWithParameters() throws Exception {
         byte[] input = new byte[]{(byte) 0xbe, (byte) 0xef};
-        Cipher cipher = Cipher.getInstance("ElGamal/None/NoPadding", "BC");
+        Cipher cipher = Cipher.getInstance("ElGamal/None/NoPadding");
         SecureRandom random = Utils.createFixedRandom();
 
         // create the parameters
-        AlgorithmParameterGenerator algorithmParameterGenerator = AlgorithmParameterGenerator.getInstance("ElGamal", "BC");
+        AlgorithmParameterGenerator algorithmParameterGenerator = AlgorithmParameterGenerator.getInstance("ElGamal");
         algorithmParameterGenerator.init(256, random);
         AlgorithmParameters params = algorithmParameterGenerator.generateParameters();
         AlgorithmParameterSpec dhSpec = params.getParameterSpec(DHParameterSpec.class);
 
         // create the keys
-        KeyPairGenerator generator = KeyPairGenerator.getInstance("ElGamal", "BC");
+        KeyPairGenerator generator = KeyPairGenerator.getInstance("ElGamal");
         generator.initialize(dhSpec, random);
         KeyPair pair = generator.generateKeyPair();
         Key publicKey = pair.getPublic();

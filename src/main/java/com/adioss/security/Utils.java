@@ -2,10 +2,7 @@ package com.adioss.security;
 
 import javax.crypto.KeyGenerator;
 import javax.crypto.spec.IvParameterSpec;
-import java.security.Key;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
-import java.security.SecureRandom;
+import java.security.*;
 
 public class Utils {
     private final static String DIGITS = "0123456789abcdef";
@@ -85,6 +82,35 @@ public class Utils {
     }
 
     public static SecureRandom createFixedRandom() {
-        throw new RuntimeException("Need to be implemented... or not");
+        return new FixedRand();
+    }
+
+    private static class FixedRand extends SecureRandom {
+        MessageDigest sha;
+        byte[] state;
+
+        FixedRand() {
+            try {
+                this.sha = MessageDigest.getInstance("SHA-1");
+                this.state = sha.digest();
+            } catch (Exception e) {
+                throw new RuntimeException("can't find SHA-1!");
+            }
+        }
+
+        public void nextBytes(byte[] bytes) {
+            int off = 0;
+            sha.update(state);
+            while (off < bytes.length) {
+                state = sha.digest();
+                if (bytes.length - off > state.length) {
+                    System.arraycopy(state, 0, bytes, off, state.length);
+                } else {
+                    System.arraycopy(state, 0, bytes, off, bytes.length - off);
+                }
+                off += state.length;
+                sha.update(state);
+            }
+        }
     }
 }
