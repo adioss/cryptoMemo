@@ -7,12 +7,13 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.security.SecureRandom;
 
-public class AESSymmetricEncryption {
-
-    private static final byte[] KEY = hexStringToByteArray("C0C1C2C3C4C5C6C7C8C9CACBCCCDCECF");
+class AESSymmetricEncryption {
+    private static final byte[] KEY = new byte[]{(byte) 0x69, (byte) 0x69, (byte) 0x2b, (byte) 0x74, (byte) 0x9e,
+            (byte) 0x80, (byte) 0x80, (byte) 0x65, (byte) 0x74, (byte) 0x65, (byte) 0x9e, (byte) 0x99, (byte) 0x99,
+            (byte) 0x99, (byte) 0x74, (byte) 0x99,};
     private static final byte[] IV = new byte[]{(byte) 0x69, (byte) 0x2b, (byte) 0x74, (byte) 0x34, (byte) 0x02, (byte) 0xb2, (byte) 0xc4, (byte) 0x9e,
             (byte) 0xf9, (byte) 0x44, (byte) 0x99, (byte) 0xc9, (byte) 0x80, (byte) 0x65, (byte) 0xcd, (byte) 0x8f};
-    
+
     private static final byte[] MESSAGE = "Hello!!".getBytes();
 
     static void encryptDecryptECB() throws Exception {
@@ -64,14 +65,5 @@ public class AESSymmetricEncryption {
             result += b + " ";
         }
         return result;
-    }
-
-    private static byte[] hexStringToByteArray(String s) {
-        int len = s.length();
-        byte[] data = new byte[len / 2];
-        for (int i = 0; i < len; i += 2) {
-            data[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4) + Character.digit(s.charAt(i + 1), 16));
-        }
-        return data;
     }
 }
