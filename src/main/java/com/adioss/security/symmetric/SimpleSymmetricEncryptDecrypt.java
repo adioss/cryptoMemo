@@ -17,13 +17,13 @@ import java.security.NoSuchAlgorithmException;
  * Simple symmetric test with input/output files. Best entry point to show how symmetric crypto works.
  * {@see com.adioss.security.symmetric.SimpleSymmetricEncryptDecryptTest}
  */
-public class SimpleSymmetricEncryptDecrypt {
+class SimpleSymmetricEncryptDecrypt {
 
-    public void encrypt(File inputFile, File outputFile, byte[] key, String algorithm, String transformation) {
+    void encrypt(File inputFile, File outputFile, byte[] key, String algorithm, String transformation) {
         doCrypto(inputFile, outputFile, Cipher.ENCRYPT_MODE, key, algorithm, transformation);
     }
 
-    public void decrypt(File inputFile, File outputFile, byte[] key, String algorithm, String transformation) {
+    void decrypt(File inputFile, File outputFile, byte[] key, String algorithm, String transformation) {
         doCrypto(inputFile, outputFile, Cipher.DECRYPT_MODE, key, algorithm, transformation);
     }
 
