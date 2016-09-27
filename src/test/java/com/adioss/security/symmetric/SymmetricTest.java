@@ -26,16 +26,6 @@ public class SymmetricTest {
         }
     }
 
-    //    @Test
-    public void shouldValidatePBEEncryptorSimulateOneDESStepWithoutException() {
-        try {
-            PBEEncryptor.simulateOneDESStep();
-        } catch (Exception e) {
-            Assert.fail("WHOOPS! Threw " + e.toString());
-            e.printStackTrace();
-        }
-    }
-
     @Test
     public void shouldValidateStreamWithoutException() {
         try {
@@ -67,9 +57,9 @@ public class SymmetricTest {
         String plaintext = "My plain text";
         String password = "my_pass";
         // When
-        byte[] encryptedData = PBEEncryptor.encrypt(plaintext, password, salt, iterationCount);
+        byte[] encryptedData = PBEEncryption.encrypt(plaintext, password, salt, iterationCount);
         // Then
-        byte[] decryptedData = PBEEncryptor.decrypt(encryptedData, password, salt, iterationCount);
+        byte[] decryptedData = PBEEncryption.decrypt(encryptedData, password, salt, iterationCount);
         System.out.println("Decrypted data: " + new String(decryptedData));
         Assert.assertEquals(plaintext, new String(decryptedData));
     }

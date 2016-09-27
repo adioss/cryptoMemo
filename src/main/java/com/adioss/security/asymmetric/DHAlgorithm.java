@@ -24,7 +24,7 @@ public class DHAlgorithm {
      * - the private key from the other
      * - each other public key
      */
-    public static void createKeysByKeyAgreementWithDH() throws Exception {
+    static void createKeysByKeyAgreementWithDH() throws Exception {
         BigInteger g512 = new BigInteger("153d5d6172adb43045b68ae8e1de1070b6137005686d29d3d73a7" +
                 "749199681ee5b212c9b96bfdcfa5b20cd5e3fd2044895d609cf9b" +
                 "410b7a0f12ca1cb9a428cc", 16);

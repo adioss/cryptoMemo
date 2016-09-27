@@ -13,7 +13,7 @@ public class DigitalSignatureAlgorithm {
     /**
      * DSA: Digital Signature Algorithm
      */
-    public static void createValidateSignatureWithDSA() throws Exception {
+    static void createValidateSignatureWithDSA() throws Exception {
         KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("DSA");
         keyPairGenerator.initialize(512, new SecureRandom());
         KeyPair keyPair = keyPairGenerator.generateKeyPair();
@@ -38,7 +38,7 @@ public class DigitalSignatureAlgorithm {
     /**
      * RSA-Based Signature Algorithms: PKCS #1 1.5 Signatures
      */
-    public static void createValidateSignatureWithPKCS1() throws Exception {
+    static void createValidateSignatureWithPKCS1() throws Exception {
         KeyPairGenerator keyGen = KeyPairGenerator.getInstance("RSA");
         keyGen.initialize(512, new SecureRandom());
         KeyPair keyPair = keyGen.generateKeyPair();

@@ -20,7 +20,6 @@ import java.security.spec.RSAPublicKeySpec;
 public class RSAAlgorithm {
 
     private static final byte[] INPUT = new byte[]{0x00, (byte) 0xbe, (byte) 0xef};
-    ;
 
     /**
      * RSA public/private key generated

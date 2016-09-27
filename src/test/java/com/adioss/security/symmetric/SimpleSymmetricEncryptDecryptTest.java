@@ -18,8 +18,8 @@ public class SimpleSymmetricEncryptDecryptTest {
     private static final String TEMP_FILE_NAME = "/outputFile.txt";
     // key size must be 16 or 128 for AES
     private static final String KEY = "Mary has one cat";
-    public static final String KEY_ALGORITHM = "AES";
-    public static final String CIPHER_TRANSFORMATION_ALGORITHM = "AES";
+    private static final String KEY_ALGORITHM = "AES";
+    private static final String CIPHER_TRANSFORMATION_ALGORITHM = "AES";
 
     @Rule
     public TemporaryFolder testFolder = new TemporaryFolder();
