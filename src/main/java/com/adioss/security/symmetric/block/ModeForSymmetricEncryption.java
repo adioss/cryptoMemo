@@ -14,7 +14,7 @@ public class ModeForSymmetricEncryption {
      * Symmetric encrypt by block with ECB mode: PKCS7 Padding using DES cipher
      * Problem: show that we can discovering patterns
      */
-    public static void encryptWithECB() throws Exception {
+    static void encryptWithECB() throws Exception {
         System.out.println("encryptWithECB");
         byte[] keyBytes = new byte[]{0x01, 0x23, 0x45, 0x67, (byte) 0x89, (byte) 0xab, (byte) 0xcd, (byte) 0xef};
 
@@ -30,10 +30,10 @@ public class ModeForSymmetricEncryption {
     /**
      * Symmetric encrypt by block with CBC mode: PKCS7 Padding using DES cipher and IV
      */
-    public static void encryptWithCBC() throws Exception {
+    static void encryptWithCBC() throws Exception {
         System.out.println("encryptWithCBC");
         byte[] keyBytes = new byte[]{0x01, 0x23, 0x45, 0x67, (byte) 0x89, (byte) 0xab, (byte) 0xcd, (byte) 0xef};
-        byte[] ivBytes = new byte[]{0x07, 0x06, 0x05, 0x04, 0x03, 0x02, 0x01, 0x00};
+        byte[] ivBytes = {0x07, 0x06, 0x05, 0x04, 0x03, 0x02, 0x01, 0x00};
 
         SecretKeySpec key = new SecretKeySpec(keyBytes, "DES");
         // used to init cipher
@@ -46,7 +46,7 @@ public class ModeForSymmetricEncryption {
     /**
      * Symmetric encrypt by block with CBC mode: PKCS7 Padding using DES cipher and secure random IV
      */
-    public static void encryptWithCBCWithSecureRandomIV() throws Exception {
+    static void encryptWithCBCWithSecureRandomIV() throws Exception {
         System.out.println("encryptWithCBCWithSecureRandomIV");
         byte[] keyBytes = new byte[]{0x01, 0x23, 0x45, 0x67, (byte) 0x89, (byte) 0xab, (byte) 0xcd, (byte) 0xef};
         byte[] ivBytes = new byte[8];
@@ -66,7 +66,7 @@ public class ModeForSymmetricEncryption {
     /**
      * Symmetric encrypt by block with CTS mode: no padding using DES cipher and IV
      */
-    public static void encryptWithCTS() throws Exception {
+    static void encryptWithCTS() throws Exception {
         System.out.println("encryptWithCTS");
         byte[] keyBytes = new byte[]{0x01, 0x23, 0x45, 0x67, (byte) 0x89, (byte) 0xab, (byte) 0xcd, (byte) 0xef};
         byte[] ivBytes = new byte[]{0x07, 0x06, 0x05, 0x04, 0x03, 0x02, 0x01, 0x00};
@@ -82,7 +82,7 @@ public class ModeForSymmetricEncryption {
     /**
      * Symmetric encrypt by block with CTR mode: no padding using DES cipher and IV
      */
-    public static void encryptWithCTR() throws Exception {
+    static void encryptWithCTR() throws Exception {
         System.out.println("encryptWithCBC");
         byte[] keyBytes = new byte[]{0x01, 0x23, 0x45, 0x67, (byte) 0x89, (byte) 0xab, (byte) 0xcd, (byte) 0xef};
         byte[] ivBytes = new byte[]{0x07, 0x06, 0x05, 0x04, 0x03, 0x02, 0x01, 0x00};

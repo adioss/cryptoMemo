@@ -1,6 +1,7 @@
 package com.adioss.security.asymmetric;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class DHAlgorithmTest {
@@ -14,6 +15,7 @@ public class DHAlgorithmTest {
         }
     }
 
+    @Ignore
     @Test
     public void shouldValidateCreateKeysByKeyAgreementWithECDH() {
         try {

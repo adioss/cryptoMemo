@@ -61,7 +61,7 @@ public class DHAlgorithm {
     /**
      * Elliptic Curve Diffie Hellman
      */
-    public static void createKeysByKeyAgreementWithECDH() throws Exception {
+    static void createKeysByKeyAgreementWithECDH() throws Exception {
         KeyPairGenerator keyGen = KeyPairGenerator.getInstance("ECDH");
         EllipticCurve curve = new EllipticCurve(new ECFieldFp(new BigInteger("fffffffffffffffffffffffffffffffeffffffffffffffff", 16)),
                 new BigInteger("fffffffffffffffffffffffffffffffefffffffffffffffc", 16),
@@ -97,6 +97,7 @@ public class DHAlgorithm {
 
     public static void main(String... args) throws Exception {
         createKeysByKeyAgreementWithDH();
-        createKeysByKeyAgreementWithECDH();
+        // TODO : without BC possible (check with extension)
+//        createKeysByKeyAgreementWithECDH();
     }
 }

@@ -13,13 +13,13 @@ public class KeyGeneration {
     /**
      * Use {@link KeyGenerator} to create a key
      */
-    public static void encryptWithKeyGenerator() throws NoSuchAlgorithmException, NoSuchProviderException, NoSuchPaddingException, InvalidKeyException, ShortBufferException, IllegalBlockSizeException, BadPaddingException, InvalidAlgorithmParameterException {
+    static void encryptWithKeyGenerator() throws Exception {
         byte[] ivBytes = new byte[]{
                 0x00, 0x00, 0x00, 0x01, 0x04, 0x05, 0x06, 0x07,
                 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01};
         Cipher cipher = Cipher.getInstance("AES/CTR/NoPadding");
         KeyGenerator generator = KeyGenerator.getInstance("AES");
-        generator.init(192);
+        generator.init(128);
         Key encryptionKey = generator.generateKey();
         System.out.println("key     : " + Utils.toHex(encryptionKey.getEncoded()));
         System.out.println("input   : " + Utils.toHex(INPUT));

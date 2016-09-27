@@ -55,7 +55,7 @@ public class Utils {
     }
 
     public static Key createKeyForAES(SecureRandom random) throws NoSuchProviderException, NoSuchAlgorithmException {
-        return createKeyForAES(256, random);
+        return createKeyForAES(128, random);
     }
 
     public static Key createKeyForAES(int bitLength, SecureRandom random) throws NoSuchProviderException, NoSuchAlgorithmException {

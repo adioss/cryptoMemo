@@ -3,13 +3,8 @@ package com.adioss.security.symmetric;
 import com.adioss.security.Utils;
 
 import javax.crypto.Cipher;
-import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.KeyGenerator;
-import javax.crypto.NoSuchPaddingException;
-import java.security.InvalidKeyException;
 import java.security.Key;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
 
 public class KeyWrapper {
     /**
@@ -17,7 +12,7 @@ public class KeyWrapper {
      * Create another key, use a cipher with it and {@link Cipher#WRAP_MODE} and wrap the original key
      * To unwrap, use a cipher with {@link Cipher#UNWRAP_MODE}
      */
-    public static void wrapUnwrapKey() throws NoSuchAlgorithmException, NoSuchProviderException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException {
+    static void wrapUnwrapKey() throws Exception {
         // create a key to wrap
         KeyGenerator generator = KeyGenerator.getInstance("AES");
         generator.init(128);
@@ -27,7 +22,7 @@ public class KeyWrapper {
         // create a wrapper and do the wrapping
         Cipher cipher = Cipher.getInstance("AESWrap");
         KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
-        keyGenerator.init(256);
+        keyGenerator.init(128);
         Key wrapKey = keyGenerator.generateKey();
         cipher.init(Cipher.WRAP_MODE, wrapKey);
         byte[] wrappedKey = cipher.wrap(keyToBeWrapped);

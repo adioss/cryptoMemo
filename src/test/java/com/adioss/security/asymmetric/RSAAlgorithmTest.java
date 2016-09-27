@@ -5,8 +5,13 @@ import org.junit.Test;
 public class RSAAlgorithmTest {
 
     @Test
-    public void shouldEncryptDecryptWithPublicPrivateRSAKeys() throws Exception {
-        RSAAlgorithm.encryptDecryptWithPublicPrivateRSAKeys();
+    public void shouldEncryptDecryptWithPublicPrivateRSAKeysGenerated() throws Exception {
+        RSAAlgorithm.encryptDecryptWithPublicPrivateRSAKeysGenerated();
+    }
+
+    @Test
+    public void shouldEncryptDecryptWithPublicPrivateRSAKeysWithExponentManuallyGenerated() throws Exception {
+        RSAAlgorithm.encryptDecryptWithPublicPrivateRSAKeysWithExponentManuallyGenerated();
     }
 
     @Test
@@ -20,7 +25,7 @@ public class RSAAlgorithmTest {
     }
 
     @Test
-    public void shouldEncryptDecryptAsymmetricKey() throws Exception {
-        RSAAlgorithm.encryptDecryptAsymmetricKey();
+    public void shouldEncryptDecryptWrappedSymmetricWithAsymmetricKey() throws Exception {
+        RSAAlgorithm.encryptDecryptWrappedSymmetricWithAsymmetricKey();
     }
 }

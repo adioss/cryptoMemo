@@ -2,25 +2,21 @@ package com.adioss.security.symmetric.block;
 
 import com.adioss.security.Utils;
 
-import javax.crypto.*;
+import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
 
 public class PaddingForSymmetricEncryption {
     /**
      * Symmetric encrypt by block with PKCS7 padding
      */
-    public static void encryptWithPadding() throws NoSuchPaddingException, NoSuchAlgorithmException, NoSuchProviderException, InvalidKeyException, ShortBufferException, BadPaddingException, IllegalBlockSizeException {
+    static void encryptWithPadding() throws Exception {
         byte[] input = new byte[]{
                 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
                 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f,
                 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17};
         byte[] keyBytes = new byte[]{
                 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
-                0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f,
-                0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17};
+                0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f};
         SecretKeySpec key = new SecretKeySpec(keyBytes, "AES");
         // here select PKCS7 padding
         Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");

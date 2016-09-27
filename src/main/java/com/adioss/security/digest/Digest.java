@@ -20,7 +20,7 @@ public class Digest {
      * Append the input to message digest with update
      * Complete cipher text with message digest(java.security.MessageDigest#digest()) with doFinal method
      */
-    public static void encryptDecryptWithDigest() throws Exception {
+    static void encryptDecryptWithDigest() throws Exception {
 
         IvParameterSpec ivParameterSpec = Utils.createIvForAES(1, SECURE_RANDOM);
         Key key = Utils.createKeyForAES(SECURE_RANDOM);
@@ -57,10 +57,10 @@ public class Digest {
      * Append the input to cipher with update + doFinal
      * Complete cipher text with message digest(java.security.MessageDigest#digest()) with doFinal method
      */
-    public static void encryptDecryptWithHMac() throws Exception {
+    static void encryptDecryptWithHMac() throws Exception {
         SecureRandom random = new SecureRandom();
         IvParameterSpec ivSpec = Utils.createIvForAES(1, random);
-        Key key = Utils.createKeyForAES(256, random);
+        Key key = Utils.createKeyForAES(128, random);
         String input = "Validate with digested data.....";
         System.out.println("input : " + input);
 
