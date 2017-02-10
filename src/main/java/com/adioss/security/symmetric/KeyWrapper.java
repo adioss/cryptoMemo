@@ -1,10 +1,8 @@
 package com.adioss.security.symmetric;
 
-import com.adioss.security.Utils;
-
-import javax.crypto.Cipher;
-import javax.crypto.KeyGenerator;
 import java.security.Key;
+import javax.crypto.*;
+import com.adioss.security.Utils;
 
 public class KeyWrapper {
     /**
@@ -36,5 +34,8 @@ public class KeyWrapper {
 
     public static void main(String[] args) throws Exception {
         wrapUnwrapKey();
+    }
+
+    private KeyWrapper() {
     }
 }

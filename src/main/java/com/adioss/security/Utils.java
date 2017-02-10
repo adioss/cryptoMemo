@@ -1,16 +1,27 @@
 package com.adioss.security;
 
-import javax.crypto.KeyGenerator;
-import javax.crypto.spec.IvParameterSpec;
-import java.security.*;
+import java.security.Key;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
+import java.security.SecureRandom;
+import javax.crypto.*;
+import javax.crypto.spec.*;
 
 public class Utils {
     private final static String DIGITS = "0123456789abcdef";
 
+    public static byte[] generateSecureRandomBytes(int size) {
+        SecureRandom secureRandom = new SecureRandom();
+        byte[] bytes = new byte[size];
+        secureRandom.nextBytes(bytes);
+        return bytes;
+    }
+
     /**
      * Return length many bytes of the passed in byte array as a hex string.
      *
-     * @param data   the bytes to be converted.
+     * @param data the bytes to be converted.
      * @param length the number of bytes in the data block to be converted.
      * @return a hex representation of length bytes of data.
      */
@@ -86,6 +97,7 @@ public class Utils {
     }
 
     private static class FixedRand extends SecureRandom {
+
         MessageDigest sha;
         byte[] state;
 
@@ -112,5 +124,8 @@ public class Utils {
                 sha.update(state);
             }
         }
+    }
+
+    private Utils() {
     }
 }

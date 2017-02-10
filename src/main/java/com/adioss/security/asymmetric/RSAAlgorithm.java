@@ -1,18 +1,21 @@
 package com.adioss.security.asymmetric;
 
-import com.adioss.security.Utils;
-
-import javax.crypto.Cipher;
-import javax.crypto.spec.IvParameterSpec;
-import javax.crypto.spec.SecretKeySpec;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.math.BigInteger;
-import java.security.*;
+import java.security.Key;
+import java.security.KeyFactory;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.PrivateKey;
+import java.security.PublicKey;
+import java.security.SecureRandom;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 import java.security.spec.RSAPrivateKeySpec;
 import java.security.spec.RSAPublicKeySpec;
+import javax.crypto.*;
+import javax.crypto.spec.*;
+import com.adioss.security.Utils;
 
 /**
  * RSA: Rivest, Shamir, Adleman
@@ -206,9 +209,12 @@ public class RSAAlgorithm {
 
     public static void main(String... args) throws Exception {
         encryptDecryptWithPublicPrivateRSAKeysGenerated();
-//        encryptDecryptWithPublicPrivateRSAKeysWithExponentManuallyGenerated();
-//        encryptDecryptWithPublicPrivatePKCS1Padding();
-//        encryptDecryptWithPublicPrivateOAEPPadding();
-//        encryptDecryptWrappedSymmetricWithAsymmetricKey();
+        //        encryptDecryptWithPublicPrivateRSAKeysWithExponentManuallyGenerated();
+        //        encryptDecryptWithPublicPrivatePKCS1Padding();
+        //        encryptDecryptWithPublicPrivateOAEPPadding();
+        //        encryptDecryptWrappedSymmetricWithAsymmetricKey();
+    }
+
+    private RSAAlgorithm() {
     }
 }

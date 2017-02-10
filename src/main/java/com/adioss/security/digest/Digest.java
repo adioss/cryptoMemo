@@ -1,14 +1,11 @@
 package com.adioss.security.digest;
 
-import com.adioss.security.Utils;
-
-import javax.crypto.Cipher;
-import javax.crypto.Mac;
-import javax.crypto.spec.IvParameterSpec;
-import javax.crypto.spec.SecretKeySpec;
 import java.security.Key;
 import java.security.MessageDigest;
 import java.security.SecureRandom;
+import javax.crypto.*;
+import javax.crypto.spec.*;
+import com.adioss.security.Utils;
 
 public class Digest {
     private static final SecureRandom SECURE_RANDOM = new SecureRandom();

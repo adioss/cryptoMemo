@@ -1,20 +1,16 @@
 package com.adioss.security.symmetric;
 
-import com.adioss.security.Utils;
-
-import javax.crypto.BadPaddingException;
-import javax.crypto.Cipher;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.ShortBufferException;
-import javax.crypto.spec.IvParameterSpec;
-import javax.crypto.spec.SecretKeySpec;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.Key;
+import javax.crypto.*;
+import javax.crypto.spec.*;
+import com.adioss.security.Utils;
 
 public final class SymmetricEncryptTools {
 
-    public static void simpleEncryptDecrypt(byte[] input, Key key, Cipher cipher) throws InvalidKeyException, ShortBufferException, IllegalBlockSizeException, BadPaddingException {
+    public static void simpleEncryptDecrypt(byte[] input, Key key, Cipher cipher)
+            throws InvalidKeyException, ShortBufferException, IllegalBlockSizeException, BadPaddingException {
         System.out.println("input : " + Utils.toHex(input));
         // encryption pass
         cipher.init(Cipher.ENCRYPT_MODE, key);
@@ -32,7 +28,8 @@ public final class SymmetricEncryptTools {
         System.out.println("plain : " + Utils.toHex(plainText) + " bytes: " + plainTextLength);
     }
 
-    public static void encryptDecryptWithIV(byte[] input, SecretKeySpec key, IvParameterSpec ivSpec, Cipher cipher) throws InvalidKeyException, InvalidAlgorithmParameterException, ShortBufferException, IllegalBlockSizeException, BadPaddingException {
+    public static void encryptDecryptWithIV(byte[] input, SecretKeySpec key, IvParameterSpec ivSpec, Cipher cipher)
+            throws InvalidKeyException, InvalidAlgorithmParameterException, ShortBufferException, IllegalBlockSizeException, BadPaddingException {
         System.out.println("input : " + Utils.toHex(input));
         // encryption pass
         cipher.init(Cipher.ENCRYPT_MODE, key, ivSpec);

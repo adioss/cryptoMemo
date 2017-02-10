@@ -1,11 +1,9 @@
 package com.adioss.security;
 
+import java.security.Provider;
+import java.util.*;
 import sun.security.jca.ProviderList;
 import sun.security.jca.Providers;
-
-import java.security.Provider;
-import java.util.List;
-import java.util.Set;
 
 public class ProviderDescriptor {
     public static void main(String... args) {
@@ -22,5 +20,8 @@ public class ProviderDescriptor {
             }
             System.out.println("<<<<<<<<<<<<<<<");
         }
+    }
+
+    private ProviderDescriptor() {
     }
 }

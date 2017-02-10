@@ -1,11 +1,10 @@
 package com.adioss.security;
 
-import javax.crypto.Cipher;
-import javax.crypto.NoSuchPaddingException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.Provider;
 import java.security.Security;
+import javax.crypto.*;
 
 /**
  * To append new cipher provider,
@@ -60,5 +59,8 @@ public class ExternalProviderTest {
         testExternalProviderInstallation();
         testProviderPriority();
         listBouncyCastleProviderCapabilities();
+    }
+
+    private ExternalProviderTest() {
     }
 }

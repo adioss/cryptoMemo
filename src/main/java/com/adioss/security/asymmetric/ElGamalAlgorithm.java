@@ -1,11 +1,15 @@
 package com.adioss.security.asymmetric;
 
-import com.adioss.security.Utils;
-
-import javax.crypto.Cipher;
-import javax.crypto.spec.DHParameterSpec;
-import java.security.*;
+import java.security.AlgorithmParameterGenerator;
+import java.security.AlgorithmParameters;
+import java.security.Key;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.SecureRandom;
 import java.security.spec.AlgorithmParameterSpec;
+import javax.crypto.*;
+import javax.crypto.spec.*;
+import com.adioss.security.Utils;
 
 public class ElGamalAlgorithm {
     private static void encryptDecryptWithElGamal() throws Exception {
@@ -66,5 +70,8 @@ public class ElGamalAlgorithm {
     public static void main(String... args) throws Exception {
         encryptDecryptWithElGamal();
         encryptDecryptWithElGamalWithParameters();
+    }
+
+    private ElGamalAlgorithm() {
     }
 }

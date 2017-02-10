@@ -22,5 +22,6 @@ public class SignatureSUNConstant {
     public static final String SHA512withECDSA = "SHA512withECDSA";
     public static final String SHA512withRSA = "SHA512withRSA";
 
-
+    private SignatureSUNConstant() {
+    }
 }

@@ -1,17 +1,7 @@
 package com.adioss.security.symmetric;
 
-import com.adioss.security.Utils;
-
-import javax.crypto.Cipher;
-import javax.crypto.SecretKey;
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.IvParameterSpec;
-import javax.crypto.spec.PBEKeySpec;
-import javax.crypto.spec.PBEParameterSpec;
-import javax.crypto.spec.SecretKeySpec;
-import java.security.Key;
-
-import static com.adioss.security.symmetric.SymmetricEncryptConstant.INPUT;
+import javax.crypto.*;
+import javax.crypto.spec.*;
 
 class PBEEncryption {
 

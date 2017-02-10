@@ -1,17 +1,11 @@
 package com.adioss.security.symmetric;
 
-import javax.crypto.BadPaddingException;
-import javax.crypto.Cipher;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
-import javax.crypto.spec.SecretKeySpec;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.security.InvalidKeyException;
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
+import javax.crypto.*;
+import javax.crypto.spec.*;
 
 /**
  * Simple symmetric test with input/output files. Best entry point to show how symmetric crypto works.
@@ -39,11 +33,7 @@ class SimpleSymmetricEncryptDecrypt {
                 byte[] outputBytes = cipher.doFinal(inputBytes);
                 outputStream.write(outputBytes);
             }
-
-
-        } catch (NoSuchPaddingException | NoSuchAlgorithmException
-                | InvalidKeyException | BadPaddingException
-                | IllegalBlockSizeException | IOException ex) {
+        } catch (NoSuchPaddingException | NoSuchAlgorithmException | InvalidKeyException | BadPaddingException | IllegalBlockSizeException | IOException ex) {
             throw new RuntimeException("Error encrypting/decrypting file", ex);
         }
     }

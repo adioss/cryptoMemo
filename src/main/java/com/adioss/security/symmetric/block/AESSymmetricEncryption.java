@@ -1,16 +1,12 @@
 package com.adioss.security.symmetric.block;
 
-import javax.crypto.Cipher;
-import javax.crypto.SecretKey;
-import javax.crypto.spec.GCMParameterSpec;
-import javax.crypto.spec.IvParameterSpec;
-import javax.crypto.spec.SecretKeySpec;
 import java.security.SecureRandom;
+import javax.crypto.*;
+import javax.crypto.spec.*;
 
 class AESSymmetricEncryption {
-    private static final byte[] KEY = new byte[]{(byte) 0x69, (byte) 0x69, (byte) 0x2b, (byte) 0x74, (byte) 0x9e,
-            (byte) 0x80, (byte) 0x80, (byte) 0x65, (byte) 0x74, (byte) 0x65, (byte) 0x9e, (byte) 0x99, (byte) 0x99,
-            (byte) 0x99, (byte) 0x74, (byte) 0x99,};
+    private static final byte[] KEY = new byte[]{(byte) 0x69, (byte) 0x69, (byte) 0x2b, (byte) 0x74, (byte) 0x9e, (byte) 0x80, (byte) 0x80, (byte) 0x65,
+            (byte) 0x74, (byte) 0x65, (byte) 0x9e, (byte) 0x99, (byte) 0x99, (byte) 0x99, (byte) 0x74, (byte) 0x99,};
     private static final byte[] IV = new byte[]{(byte) 0x69, (byte) 0x2b, (byte) 0x74, (byte) 0x34, (byte) 0x02, (byte) 0xb2, (byte) 0xc4, (byte) 0x9e,
             (byte) 0xf9, (byte) 0x44, (byte) 0x99, (byte) 0xc9, (byte) 0x80, (byte) 0x65, (byte) 0xcd, (byte) 0x8f};
 

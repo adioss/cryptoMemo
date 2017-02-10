@@ -1,11 +1,10 @@
 package com.adioss.security.asymmetric;
 
-import com.adioss.security.Utils;
-
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.SecureRandom;
 import java.security.Signature;
+import com.adioss.security.Utils;
 
 import static com.adioss.security.SignatureSUNConstant.SHA1withRSA;
 
@@ -63,5 +62,8 @@ public class DigitalSignatureAlgorithm {
     public static void main(String... args) throws Exception {
         createValidateSignatureWithDSA();
         createValidateSignatureWithPKCS1();
+    }
+
+    private DigitalSignatureAlgorithm() {
     }
 }

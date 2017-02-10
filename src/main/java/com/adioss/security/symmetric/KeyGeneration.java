@@ -1,11 +1,9 @@
 package com.adioss.security.symmetric;
 
-import com.adioss.security.Utils;
-
+import java.security.Key;
 import javax.crypto.*;
-import javax.crypto.spec.IvParameterSpec;
-import javax.crypto.spec.SecretKeySpec;
-import java.security.*;
+import javax.crypto.spec.*;
+import com.adioss.security.Utils;
 
 import static com.adioss.security.symmetric.SymmetricEncryptConstant.INPUT;
 
@@ -14,9 +12,7 @@ public class KeyGeneration {
      * Use {@link KeyGenerator} to create a key
      */
     static void encryptWithKeyGenerator() throws Exception {
-        byte[] ivBytes = new byte[]{
-                0x00, 0x00, 0x00, 0x01, 0x04, 0x05, 0x06, 0x07,
-                0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01};
+        byte[] ivBytes = Utils.generateSecureRandomBytes(16);
         Cipher cipher = Cipher.getInstance("AES/CTR/NoPadding");
         KeyGenerator generator = KeyGenerator.getInstance("AES");
         generator.init(128);
@@ -42,5 +38,8 @@ public class KeyGeneration {
 
     public static void main(String[] args) throws Exception {
         encryptWithKeyGenerator();
+    }
+
+    private KeyGeneration() {
     }
 }

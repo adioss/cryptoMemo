@@ -1,13 +1,11 @@
 package com.adioss.security.symmetric.block;
 
-import javax.crypto.Cipher;
-import javax.crypto.spec.IvParameterSpec;
-import javax.crypto.spec.SecretKeySpec;
-import java.security.SecureRandom;
+import javax.crypto.*;
+import javax.crypto.spec.*;
+import com.adioss.security.Utils;
 
 import static com.adioss.security.symmetric.SymmetricEncryptConstant.INPUT;
-import static com.adioss.security.symmetric.SymmetricEncryptTools.encryptDecryptWithIV;
-import static com.adioss.security.symmetric.SymmetricEncryptTools.simpleEncryptDecrypt;
+import static com.adioss.security.symmetric.SymmetricEncryptTools.*;
 
 public class ModeForSymmetricEncryption {
     /**
@@ -33,7 +31,7 @@ public class ModeForSymmetricEncryption {
     static void encryptWithCBC() throws Exception {
         System.out.println("encryptWithCBC");
         byte[] keyBytes = new byte[]{0x01, 0x23, 0x45, 0x67, (byte) 0x89, (byte) 0xab, (byte) 0xcd, (byte) 0xef};
-        byte[] ivBytes = {0x07, 0x06, 0x05, 0x04, 0x03, 0x02, 0x01, 0x00};
+        byte[] ivBytes = Utils.generateSecureRandomBytes(8);
 
         SecretKeySpec key = new SecretKeySpec(keyBytes, "DES");
         // used to init cipher
@@ -49,12 +47,10 @@ public class ModeForSymmetricEncryption {
     static void encryptWithCBCWithSecureRandomIV() throws Exception {
         System.out.println("encryptWithCBCWithSecureRandomIV");
         byte[] keyBytes = new byte[]{0x01, 0x23, 0x45, 0x67, (byte) 0x89, (byte) 0xab, (byte) 0xcd, (byte) 0xef};
-        byte[] ivBytes = new byte[8];
+        byte[] ivBytes = Utils.generateSecureRandomBytes(8);
 
         SecretKeySpec key = new SecretKeySpec(keyBytes, "DES");
         // used to init cipher
-        SecureRandom secureRandom = new SecureRandom();
-        secureRandom.nextBytes(ivBytes);
         IvParameterSpec ivSpec = new IvParameterSpec(ivBytes);
         Cipher cipher = Cipher.getInstance("DES/CBC/PKCS5Padding");
         // secure random can be done by calling cipher method too
@@ -62,14 +58,13 @@ public class ModeForSymmetricEncryption {
         encryptDecryptWithIV(INPUT, key, ivSpec, cipher);
     }
 
-
     /**
      * Symmetric encrypt by block with CTS mode: no padding using DES cipher and IV
      */
     static void encryptWithCTS() throws Exception {
         System.out.println("encryptWithCTS");
         byte[] keyBytes = new byte[]{0x01, 0x23, 0x45, 0x67, (byte) 0x89, (byte) 0xab, (byte) 0xcd, (byte) 0xef};
-        byte[] ivBytes = new byte[]{0x07, 0x06, 0x05, 0x04, 0x03, 0x02, 0x01, 0x00};
+        byte[] ivBytes = Utils.generateSecureRandomBytes(8);
 
         SecretKeySpec key = new SecretKeySpec(keyBytes, "DES");
         // used to init cipher
