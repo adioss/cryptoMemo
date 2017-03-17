@@ -5,6 +5,9 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 public class JksPasswordBypasser {
+
+    private static final String EMPTY_PASSWORD = "";
+
     private JksPasswordBypasser() {
     }
 
@@ -12,14 +15,14 @@ public class JksPasswordBypasser {
         JksContentManager jksContentManager = new JksContentManager();
 
         try (InputStream in = new FileInputStream(keyStoreFilePath)) {
-            jksContentManager.engineLoad(in, "".toCharArray());
+            jksContentManager.load(in, EMPTY_PASSWORD.toCharArray());
         }
 
         String outputPath = Paths.get(keyStoreFilePath).getParent() + File.separator + "result.jks";
         System.out.printf("Copy '%s' content and writing it to '%s' with empty password\n", keyStoreFilePath, outputPath);
 
         try (OutputStream out = new FileOutputStream(outputPath)) {
-            jksContentManager.engineStore(out, "".toCharArray());
+            jksContentManager.save(out, EMPTY_PASSWORD.toCharArray());
         }
         System.out.println("KeyStore with empty password created: " + outputPath);
     }

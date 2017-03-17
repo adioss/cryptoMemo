@@ -13,6 +13,8 @@ import java.util.*;
  */
 final class JksContentManager {
     private static final int MAGIC = 0xFEEDFEED;
+    // https://cryptosense.com/mighty-aphrodite-dark-secrets-of-the-java-keystore/
+    private static final String MIGHTY_APHRODITE = "Mighty Aphrodite";
 
     private static final int PRIVATE_KEY = 1;
     private static final int TRUSTED_CERT = 2;
@@ -23,84 +25,92 @@ final class JksContentManager {
     private final Map<String, Certificate[]> certChains = new HashMap<>();
     private final Map<String, Date> dates = new HashMap<>();
 
-    void engineLoad(InputStream inputStream, char[] password) throws Exception {
+    void load(InputStream inputStream, char[] password) throws Exception {
         reset();
+        // here digest is used in parallel to check integrity of extracted data at the end
         MessageDigest messageDigest = MessageDigest.getInstance("SHA");
         messageDigest.update(charsToBytes(password));
-        messageDigest.update("Mighty Aphrodite".getBytes("UTF-8")); // HAR HAR
-        DataInputStream dataInputStream = new DataInputStream(new DigestInputStream(inputStream, messageDigest));
-        if (dataInputStream.readInt() != MAGIC) {
-            throw new IOException("not a JavaKeyStore");
-        }
-        dataInputStream.readInt();  // version no.
-        final int n = dataInputStream.readInt();
-        if (n < 0) {
-            throw new IOException("negative entry count");
-        }
-        for (int i = 0; i < n; i++) {
-            int type = dataInputStream.readInt();
-            String alias = dataInputStream.readUTF();
-            aliases.add(alias);
-            dates.put(alias, new Date(dataInputStream.readLong()));
-            switch (type) {
-                case PRIVATE_KEY:
-                    byte[] encoded = new byte[dataInputStream.readInt()];
-                    dataInputStream.read(encoded);
-                    privateKeys.put(alias, encoded);
-                    int count = dataInputStream.readInt();
-                    Certificate[] chain = new Certificate[count];
-                    for (int j = 0; j < count; j++) {
-                        chain[j] = readCertificate(dataInputStream);
-                    }
-                    certChains.put(alias, chain);
-                    break;
-
-                case TRUSTED_CERT:
-                    trustedCerts.put(alias, readCertificate(dataInputStream));
-                    break;
-
-                default:
-                    throw new IOException("malformed key store");
+        messageDigest.update(MIGHTY_APHRODITE.getBytes("UTF-8"));
+        try (DataInputStream dataInputStream = new DataInputStream(new DigestInputStream(inputStream, messageDigest))) {
+            // magic number
+            if (dataInputStream.readInt() != MAGIC) {
+                throw new IOException("not a JavaKeyStore");
             }
-        }
+            // version: 2
+            dataInputStream.readInt();
+            // entry count
+            final int n = dataInputStream.readInt();
+            if (n < 0) {
+                throw new IOException("negative entry count");
+            }
+            // iterate over entries
+            for (int i = 0; i < n; i++) {
+                int type = dataInputStream.readInt();
+                String alias = dataInputStream.readUTF();
+                aliases.add(alias);
+                dates.put(alias, new Date(dataInputStream.readLong()));
+                switch (type) {
+                    case PRIVATE_KEY:
+                        byte[] encoded = new byte[dataInputStream.readInt()];
+                        dataInputStream.read(encoded);
+                        privateKeys.put(alias, encoded);
+                        int count = dataInputStream.readInt();
+                        Certificate[] chain = new Certificate[count];
+                        for (int j = 0; j < count; j++) {
+                            chain[j] = readCertificate(dataInputStream);
+                        }
+                        certChains.put(alias, chain);
+                        break;
 
-        byte[] hash = new byte[20];
-        dataInputStream.read(hash);
-        if (MessageDigest.isEqual(hash, messageDigest.digest())) {
-            throw new IOException("signature not verified");
+                    case TRUSTED_CERT:
+                        trustedCerts.put(alias, readCertificate(dataInputStream));
+                        break;
+
+                    default:
+                        throw new IOException("malformed key store");
+                }
+            }
+
+            // check the digest of what has been extracted
+            byte[] hash = new byte[20];
+            dataInputStream.read(hash);
+            if (MessageDigest.isEqual(hash, messageDigest.digest())) {
+                throw new IOException("signature not verified");
+            }
         }
     }
 
-    void engineStore(OutputStream out, char[] password) throws Exception {
-        MessageDigest md = MessageDigest.getInstance("SHA1");
-        md.update(charsToBytes(password));
-        md.update("Mighty Aphrodite".getBytes("UTF-8"));
-        DataOutputStream outputStream = new DataOutputStream(new DigestOutputStream(out, md));
-        outputStream.writeInt(MAGIC);
-        outputStream.writeInt(2);
-        outputStream.writeInt(aliases.size());
-        for (String alias : aliases) {
-            if (trustedCerts.containsKey(alias)) {
-                outputStream.writeInt(TRUSTED_CERT);
-                outputStream.writeUTF(alias);
-                outputStream.writeLong(dates.get(alias).getTime());
-                writeCertificate(outputStream, trustedCerts.get(alias));
-            } else {
-                outputStream.writeInt(PRIVATE_KEY);
-                outputStream.writeUTF(alias);
-                outputStream.writeLong(dates.get(alias).getTime());
-                byte[] key = privateKeys.get(alias);
-                outputStream.writeInt(key.length);
-                outputStream.write(key);
-                Certificate[] chains = certChains.get(alias);
-                outputStream.writeInt(chains.length);
-                for (Certificate chain : chains) {
-                    writeCertificate(outputStream, chain);
+    void save(OutputStream outputStream, char[] password) throws Exception {
+        MessageDigest messageDigest = MessageDigest.getInstance("SHA1");
+        messageDigest.update(charsToBytes(password));
+        messageDigest.update(MIGHTY_APHRODITE.getBytes("UTF-8"));
+        try (DataOutputStream dataOutputStream = new DataOutputStream(new DigestOutputStream(outputStream, messageDigest))) {
+            dataOutputStream.writeInt(MAGIC);
+            dataOutputStream.writeInt(2);
+            dataOutputStream.writeInt(aliases.size());
+            for (String alias : aliases) {
+                if (trustedCerts.containsKey(alias)) {
+                    dataOutputStream.writeInt(TRUSTED_CERT);
+                    dataOutputStream.writeUTF(alias);
+                    dataOutputStream.writeLong(dates.get(alias).getTime());
+                    writeCertificate(dataOutputStream, trustedCerts.get(alias));
+                } else {
+                    dataOutputStream.writeInt(PRIVATE_KEY);
+                    dataOutputStream.writeUTF(alias);
+                    dataOutputStream.writeLong(dates.get(alias).getTime());
+                    byte[] key = privateKeys.get(alias);
+                    dataOutputStream.writeInt(key.length);
+                    dataOutputStream.write(key);
+                    Certificate[] chains = certChains.get(alias);
+                    dataOutputStream.writeInt(chains.length);
+                    for (Certificate chain : chains) {
+                        writeCertificate(dataOutputStream, chain);
+                    }
                 }
             }
+            byte[] digest = messageDigest.digest();
+            dataOutputStream.write(digest);
         }
-        byte[] digest = md.digest();
-        outputStream.write(digest);
     }
 
     private static void writeCertificate(DataOutputStream dataOutputStream, Certificate cert) throws Exception {
