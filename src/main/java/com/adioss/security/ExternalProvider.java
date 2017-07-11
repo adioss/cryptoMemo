@@ -1,7 +1,5 @@
 package com.adioss.security;
 
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
 import java.security.Provider;
 import java.security.Security;
 import javax.crypto.*;
@@ -11,12 +9,12 @@ import javax.crypto.*;
  * - add jar into jre\lib\ext
  * - modify java.security and add a new security provider. For ex: security.provider.11=org.bouncycastle.jce.provider.BouncyCastleProvider
  */
-public class ExternalProviderTest {
+class ExternalProvider {
 
     /**
      * Test the external provider installation
      */
-    private static void testExternalProviderInstallation() {
+    static void testExternalProviderInstallation() {
         String providerName = "BC";
 
         if (Security.getProvider(providerName) == null) {
@@ -30,7 +28,7 @@ public class ExternalProviderTest {
      * Here as BC provider as less priority than default jvm(security.provider.11=org.bouncycastle.jce.provider.BouncyCastleProvider)
      * when we call blowfish cipher, default is select until we specified it
      */
-    private static void testProviderPriority() throws NoSuchAlgorithmException, NoSuchPaddingException, NoSuchProviderException {
+    static void testProviderPriority() throws Exception {
         Cipher cipher = Cipher.getInstance("Blowfish/ECB/NoPadding");
         System.out.println(cipher.getProvider());
 
@@ -55,12 +53,6 @@ public class ExternalProviderTest {
         }
     }
 
-    public static void main(String[] args) throws NoSuchPaddingException, NoSuchAlgorithmException, NoSuchProviderException {
-        testExternalProviderInstallation();
-        testProviderPriority();
-        listBouncyCastleProviderCapabilities();
-    }
-
-    private ExternalProviderTest() {
+    private ExternalProvider() {
     }
 }

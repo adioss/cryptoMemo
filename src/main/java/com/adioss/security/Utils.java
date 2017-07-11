@@ -1,5 +1,6 @@
 package com.adioss.security;
 
+import java.io.*;
 import java.security.Key;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -7,6 +8,8 @@ import java.security.NoSuchProviderException;
 import java.security.SecureRandom;
 import javax.crypto.*;
 import javax.crypto.spec.*;
+import org.bouncycastle.openssl.PEMWriter;
+import org.bouncycastle.pkcs.PKCS10CertificationRequest;
 
 public class Utils {
     private final static String DIGITS = "0123456789abcdef";
@@ -123,6 +126,15 @@ public class Utils {
                 off += state.length;
                 sha.update(state);
             }
+        }
+    }
+
+    /**
+     * Print a {@link PKCS10CertificationRequest} cert request to the console
+     */
+    public static void printCertRequest(PKCS10CertificationRequest request) throws IOException {
+        try (PEMWriter pemWrt = new PEMWriter(new OutputStreamWriter(System.out))) {
+            pemWrt.writeObject(request);
         }
     }
 
