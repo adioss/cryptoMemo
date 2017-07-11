@@ -89,6 +89,7 @@ public class CertificateValidationTest {
         assertFalse(validatePathWithBuilder(endEntityCertificate, caRootCertificate, otherIntermediateCertificate));
         assertFalse(validatePathWithBuilder(endEntityCertificate, caRootCertificate, fakeIntermediateCertificate));
         assertTrue(validatePathWithBuilder(endEntityCertificate, caRootCertificate, intermediateCertificate, fakeIntermediateCertificate));
+        assertTrue(validatePathWithBuilder("CN=End Certificate", caRootCertificate, endEntityCertificate, intermediateCertificate));
     }
 
     @Test

@@ -14,8 +14,11 @@ import java.security.cert.PKIXParameters;
 import java.security.cert.TrustAnchor;
 import java.security.cert.X509CertSelector;
 import java.security.cert.X509Certificate;
+import java.util.ArrayList;
 import java.util.*;
+import javax.security.auth.x500.*;
 
+import static java.util.Arrays.*;
 import static java.util.Collections.*;
 
 class CertificatePathValidator {
@@ -31,9 +34,9 @@ class CertificatePathValidator {
     static boolean validatePathWithBuilder(X509Certificate endEntityCertificate, X509Certificate trustedRootCert, X509Certificate... intermediateCerts)
             throws Exception {
         try {
-            // Create the selector that specifies the starting certificate
-            X509CertSelector constraints = new X509CertSelector();
-            constraints.setCertificate(endEntityCertificate);
+            // Create the selector that specifies the certificate that we want to match
+            X509CertSelector certSelector = new X509CertSelector();
+            certSelector.setCertificate(endEntityCertificate);
 
             // Create the trust anchors (set of root CA certificates)
             if (!isSelfSigned(trustedRootCert)) {
@@ -43,7 +46,7 @@ class CertificatePathValidator {
             trustAnchors.add(new TrustAnchor(trustedRootCert, null));
 
             // Configure the PKIX certificate builder algorithm parameters
-            PKIXBuilderParameters pkixBuilderParameters = new PKIXBuilderParameters(trustAnchors, constraints);
+            PKIXBuilderParameters pkixBuilderParameters = new PKIXBuilderParameters(trustAnchors, certSelector);
 
             // Disable CRL checks
             pkixBuilderParameters.setRevocationEnabled(false);
@@ -58,6 +61,44 @@ class CertificatePathValidator {
                     checkedIntermediateCerts.add(intermediateCert);
                 }
                 CertStore intermediateCertStore = CertStore.getInstance("Collection", new CollectionCertStoreParameters(checkedIntermediateCerts));
+                pkixBuilderParameters.addCertStore(intermediateCertStore);
+            }
+
+            // Build and verify the certification chain
+            CertPathBuilder certPathBuilder = CertPathBuilder.getInstance("PKIX");
+            PKIXCertPathBuilderResult pathBuilderResult = (PKIXCertPathBuilderResult) certPathBuilder.build(pkixBuilderParameters);
+            return pathBuilderResult != null;
+        } catch (Exception e) {
+            // Impossible to build path correctly
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    @SuppressWarnings("SameParameterValue")
+    static boolean validatePathWithBuilder(String endEntityCertificate, X509Certificate... certificates) throws Exception {
+        try {
+            // Create the selector that specifies the certificate that we want to match
+            X509CertSelector certSelector = new X509CertSelector();
+            certSelector.setSubject(new X500Principal(endEntityCertificate).getEncoded());
+
+            // Create the trust anchor (here for simplicity, only one root CA certificate should be provided)
+            Optional<X509Certificate> trustedRootCert = Arrays.stream(certificates).filter(CertificatePathValidator::isSelfSigned).findFirst();
+            if (!trustedRootCert.isPresent()) {
+                throw new RuntimeException("'trustedRootCert' must be present / self signed.");
+            }
+            Set<TrustAnchor> trustAnchors = new HashSet<>();
+            trustAnchors.add(new TrustAnchor(trustedRootCert.get(), null));
+
+            // Configure the PKIX certificate builder algorithm parameters
+            PKIXBuilderParameters pkixBuilderParameters = new PKIXBuilderParameters(trustAnchors, certSelector);
+
+            // Disable CRL checks
+            pkixBuilderParameters.setRevocationEnabled(false);
+
+            // Specify a list of certificates (+ the on to retrieve with the selector)
+            if (certificates.length > 0) {
+                CertStore intermediateCertStore = CertStore.getInstance("Collection", new CollectionCertStoreParameters(asList(certificates)));
                 pkixBuilderParameters.addCertStore(intermediateCertStore);
             }
 
