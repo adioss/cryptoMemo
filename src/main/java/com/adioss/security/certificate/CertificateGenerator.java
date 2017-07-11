@@ -123,6 +123,8 @@ class CertificateGenerator {
         X509v3CertificateBuilder x509v3CertificateBuilder = new X509v3CertificateBuilder(issuer, serial, START_DATE, END_DATE, //
                                                                                          subject1, request.getSubjectPublicKeyInfo());
 
+        // not a CA
+        x509v3CertificateBuilder.addExtension(Extension.basicConstraints, true, new BasicConstraints(false));
         // server auth. Critical: true
         x509v3CertificateBuilder.addExtension(Extension.extendedKeyUsage, true, new ExtendedKeyUsage(KeyPurposeId.id_kp_serverAuth));
         // add issuer subjectKey identifier. Critical: false
