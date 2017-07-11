@@ -13,6 +13,7 @@ import org.bouncycastle.asn1.x509.GeneralName;
 import org.bouncycastle.asn1.x509.GeneralNames;
 import org.bouncycastle.asn1.x509.KeyPurposeId;
 import org.bouncycastle.asn1.x509.KeyUsage;
+import org.bouncycastle.asn1.x509.SubjectKeyIdentifier;
 import org.bouncycastle.asn1.x509.SubjectPublicKeyInfo;
 import org.bouncycastle.cert.X509CertificateHolder;
 import org.bouncycastle.cert.X509v1CertificateBuilder;
@@ -91,6 +92,9 @@ class CertificateGenerator {
         // add issuer subjectKey identifier. Critical: false
         AuthorityKeyIdentifier authorityKeyIdentifier = new JcaX509ExtensionUtils().createAuthorityKeyIdentifier(caCert.getPublicKey());
         x509v3CertificateBuilder.addExtension(Extension.authorityKeyIdentifier, false, authorityKeyIdentifier);
+        // add subjectKey identifier. Critical: false
+        SubjectKeyIdentifier subjectKeyIdentifier = new JcaX509ExtensionUtils().createSubjectKeyIdentifier(keyPair.getPublic());
+        x509v3CertificateBuilder.addExtension(Extension.subjectKeyIdentifier, false, subjectKeyIdentifier);
         // put a DNS SAN. Critical: false
         GeneralNames generalNames = new GeneralNames(new GeneralName[]{new GeneralName(GeneralName.dNSName, subjectValue + ".intermediate.ca")});
         x509v3CertificateBuilder.addExtension(Extension.subjectAlternativeName, false, generalNames);
@@ -119,8 +123,14 @@ class CertificateGenerator {
         X509v3CertificateBuilder x509v3CertificateBuilder = new X509v3CertificateBuilder(issuer, serial, START_DATE, END_DATE, //
                                                                                          subject1, request.getSubjectPublicKeyInfo());
 
-        // server auth
+        // server auth. Critical: true
         x509v3CertificateBuilder.addExtension(Extension.extendedKeyUsage, true, new ExtendedKeyUsage(KeyPurposeId.id_kp_serverAuth));
+        // add issuer subjectKey identifier. Critical: false
+        AuthorityKeyIdentifier authorityKeyIdentifier = new JcaX509ExtensionUtils().createAuthorityKeyIdentifier(intermediateCaKeyCertificate.getPublicKey());
+        x509v3CertificateBuilder.addExtension(Extension.authorityKeyIdentifier, false, authorityKeyIdentifier);
+        // add subjectKey identifier. Critical: false
+        SubjectKeyIdentifier subjectKeyIdentifier = new JcaX509ExtensionUtils().createSubjectKeyIdentifier(keyPair.getPublic());
+        x509v3CertificateBuilder.addExtension(Extension.subjectKeyIdentifier, false, subjectKeyIdentifier);
         // put a DNS SAN
         GeneralNames generalNames = new GeneralNames(new GeneralName[]{new GeneralName(GeneralName.dNSName, subjectValue + ".end.certificate.ca")});
         x509v3CertificateBuilder.addExtension(Extension.subjectAlternativeName, false, generalNames);
