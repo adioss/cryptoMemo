@@ -5,6 +5,7 @@ import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.KeyStore;
 import java.security.Security;
+import java.security.cert.X509CRL;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
@@ -101,5 +102,30 @@ public class CertificateValidationTest {
 
             assertTrue(manuallyValidatePaths(certificate, keyStore));
         }
+    }
+
+    @Test
+    public void shouldDetectRevokedCertificateUsingCRL() throws Exception {
+        KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
+        keyPairGenerator.initialize(2048);
+        // Generate root CA
+        KeyPair caRootKeyPair = keyPairGenerator.generateKeyPair();
+        X509Certificate caRootCertificate = CertificateGenerator.generateRootCert(caRootKeyPair, "CN=Root CA Certificate");
+        // Generate standard certificate to revoke
+        KeyPair standardKeyPairRevoked = keyPairGenerator.generateKeyPair();
+        X509Certificate endEntityCertificateRevoked = generateEndEntityCert(standardKeyPairRevoked, caRootKeyPair, caRootCertificate,
+                                                                            "CN=End Certificate Revoked");
+        KeyPair standardKeyPairNotRevoked = keyPairGenerator.generateKeyPair();
+        X509Certificate endEntityCertificateNotRevoked = generateEndEntityCert(standardKeyPairNotRevoked, caRootKeyPair, caRootCertificate,
+                                                                               "CN=End Certificate Not Revoked");
+
+        // Create a CRL for this CA
+        X509CRL crl = CRLGenerator.createCRL(caRootCertificate, caRootKeyPair, endEntityCertificateRevoked.getSerialNumber());
+        // CRL checked by issuer
+        crl.verify(caRootCertificate.getPublicKey());
+        // certificate revoked is found
+        assertNotNull(crl.getRevokedCertificate(endEntityCertificateRevoked));
+        // certificate not revoked is absent
+        assertNull(crl.getRevokedCertificate(endEntityCertificateNotRevoked));
     }
 }
