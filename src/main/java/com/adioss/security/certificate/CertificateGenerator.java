@@ -122,11 +122,12 @@ class CertificateGenerator {
         X500Name subject1 = request.toASN1Structure().getCertificationRequestInfo().getSubject();
         X509v3CertificateBuilder x509v3CertificateBuilder = new X509v3CertificateBuilder(issuer, serial, START_DATE, END_DATE, //
                                                                                          subject1, request.getSubjectPublicKeyInfo());
-
         // not a CA
         x509v3CertificateBuilder.addExtension(Extension.basicConstraints, true, new BasicConstraints(false));
         // server auth. Critical: true
         x509v3CertificateBuilder.addExtension(Extension.extendedKeyUsage, true, new ExtendedKeyUsage(KeyPurposeId.id_kp_serverAuth));
+        //  public key is used for key transport. Critical: true
+        x509v3CertificateBuilder.addExtension(Extension.keyUsage, true, new KeyUsage(KeyUsage.digitalSignature | KeyUsage.keyEncipherment));
         // add issuer subjectKey identifier. Critical: false
         AuthorityKeyIdentifier authorityKeyIdentifier = new JcaX509ExtensionUtils().createAuthorityKeyIdentifier(intermediateCaKeyCertificate.getPublicKey());
         x509v3CertificateBuilder.addExtension(Extension.authorityKeyIdentifier, false, authorityKeyIdentifier);
