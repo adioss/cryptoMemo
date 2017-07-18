@@ -14,6 +14,7 @@ import javax.crypto.spec.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.adioss.security.Utils;
+import com.google.common.annotations.VisibleForTesting;
 
 /**
  * DH: Diffie Helman
@@ -30,6 +31,7 @@ class DHAlgorithm {
      * - the private key
      * - each other public key
      */
+    @VisibleForTesting
     static boolean createKeysByKeyAgreementWithDH() throws Exception {
         BigInteger g512 = new BigInteger(
                 "153d5d6172adb43045b68ae8e1de1070b6137005686d29d3d73a7749199681ee5b212c9b96bfdcfa5b20cd5e3fd2044895d609cf9b410b7a0f12ca1cb9a428cc", 16);
@@ -65,6 +67,7 @@ class DHAlgorithm {
     /**
      * Elliptic Curve Diffie Hellman
      */
+    @VisibleForTesting
     static boolean createKeysByKeyAgreementWithECDH() throws Exception {
         KeyPairGenerator keyGen = KeyPairGenerator.getInstance(ECDH);
         EllipticCurve curve = new EllipticCurve(new ECFieldFp(new BigInteger("fffffffffffffffffffffffffffffffeffffffffffffffff", 16)),

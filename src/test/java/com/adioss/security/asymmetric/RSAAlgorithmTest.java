@@ -8,16 +8,16 @@ public class RSAAlgorithmTest {
     @Test
     public void shouldEncryptDecryptWithPublicPrivateRSAKeysGenerated() {
         try {
-            DigitalSignatureAlgorithm.createValidateSignatureWithDSA();
+            RSAAlgorithm.encryptDecryptWithPublicPrivateRSAKeysGenerated();
         } catch (Exception e) {
             Assert.fail("WHOOPS! Threw " + e.toString());
         }
     }
 
     @Test
-    public void shouldEncryptDecryptWithPublicPrivateRSAKeysWithExponentManuallyGenerated() {
+    public void encryptDecryptWithPublicPrivateRSAKeysWithExponentManuallyGenerated() {
         try {
-            DigitalSignatureAlgorithm.createValidateSignatureWithDSA();
+            RSAAlgorithm.encryptDecryptWithPublicPrivateRSAKeysWithExponentManuallyGenerated();
         } catch (Exception e) {
             Assert.fail("WHOOPS! Threw " + e.toString());
         }

@@ -8,10 +8,12 @@ import javax.crypto.spec.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.adioss.security.Utils;
+import com.google.common.annotations.VisibleForTesting;
 
 public final class SymmetricEncryptTools {
     private static final Logger LOG = LoggerFactory.getLogger(SymmetricEncryptTools.class);
 
+    @VisibleForTesting
     public static void simpleEncryptDecrypt(byte[] input, Key key, Cipher cipher)
             throws InvalidKeyException, ShortBufferException, IllegalBlockSizeException, BadPaddingException {
         LOG.debug("input : " + Utils.toHex(input));
@@ -31,6 +33,7 @@ public final class SymmetricEncryptTools {
         LOG.debug("plain : " + Utils.toHex(plainText) + " bytes: " + plainTextLength);
     }
 
+    @VisibleForTesting
     public static void encryptDecryptWithIV(byte[] input, SecretKeySpec key, IvParameterSpec ivSpec, Cipher cipher)
             throws InvalidKeyException, InvalidAlgorithmParameterException, ShortBufferException, IllegalBlockSizeException, BadPaddingException {
         LOG.debug("input : " + Utils.toHex(input));

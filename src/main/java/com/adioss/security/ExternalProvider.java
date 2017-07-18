@@ -5,6 +5,7 @@ import java.security.Security;
 import javax.crypto.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.google.common.annotations.VisibleForTesting;
 
 /**
  * To append new cipher provider,
@@ -17,6 +18,7 @@ class ExternalProvider {
     /**
      * Test the external provider installation
      */
+    @VisibleForTesting
     static void testExternalProviderInstallation() {
         String providerName = "BC";
 
@@ -31,6 +33,7 @@ class ExternalProvider {
      * Here as BC provider as less priority than default jvm(security.provider.11=org.bouncycastle.jce.provider.BouncyCastleProvider)
      * when we call blowfish cipher, default is select until we specified it
      */
+    @VisibleForTesting
     static void testProviderPriority() throws Exception {
         Cipher cipher = Cipher.getInstance("Blowfish/ECB/NoPadding");
         LOG.debug(cipher.getProvider().getName());
@@ -42,6 +45,7 @@ class ExternalProvider {
     /**
      * List all BouncyCastle provider capabilities: ciphers, key agreement, macs, message digests, signatures and other objects
      */
+    @SuppressWarnings("unused")
     private static void listBouncyCastleProviderCapabilities() {
         Provider provider = Security.getProvider("BC");
         for (Object o : provider.keySet()) {

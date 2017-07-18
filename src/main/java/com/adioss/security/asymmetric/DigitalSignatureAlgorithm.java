@@ -7,14 +7,17 @@ import java.security.Signature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.adioss.security.Utils;
+import com.google.common.annotations.VisibleForTesting;
 
 import static com.adioss.security.SignatureSUNConstant.SHA1withRSA;
 
 class DigitalSignatureAlgorithm {
     private static final Logger LOG = LoggerFactory.getLogger(DigitalSignatureAlgorithm.class);
+
     /**
      * DSA: Digital Signature Algorithm
      */
+    @VisibleForTesting
     static void createValidateSignatureWithDSA() throws Exception {
         KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("DSA");
         keyPairGenerator.initialize(512, new SecureRandom());
@@ -40,6 +43,7 @@ class DigitalSignatureAlgorithm {
     /**
      * RSA-Based Signature Algorithms: PKCS #1 1.5 Signatures
      */
+    @VisibleForTesting
     static void createValidateSignatureWithPKCS1() throws Exception {
         KeyPairGenerator keyGen = KeyPairGenerator.getInstance("RSA");
         keyGen.initialize(512, new SecureRandom());
@@ -60,11 +64,6 @@ class DigitalSignatureAlgorithm {
         } else {
             LOG.debug("signature verification failed.");
         }
-    }
-
-    public static void main(String... args) throws Exception {
-        createValidateSignatureWithDSA();
-        createValidateSignatureWithPKCS1();
     }
 
     private DigitalSignatureAlgorithm() {

@@ -4,6 +4,7 @@ import javax.crypto.*;
 import javax.crypto.spec.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.google.common.annotations.VisibleForTesting;
 
 class SimpleCipherTest {
     private static final Logger LOG = LoggerFactory.getLogger(SimpleCipherTest.class);
@@ -12,6 +13,7 @@ class SimpleCipherTest {
      * remark: without jce unlimited, key192 will not work
      * => http://www.oracle.com/technetwork/java/javase/downloads/jce8-download-2133166.html
      */
+    @VisibleForTesting
     public static void test() throws Exception {
         byte[] data = {0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07};
 

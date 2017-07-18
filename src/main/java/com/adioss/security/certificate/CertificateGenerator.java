@@ -24,6 +24,7 @@ import org.bouncycastle.operator.ContentSigner;
 import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
 import org.bouncycastle.pkcs.PKCS10CertificationRequest;
 import org.bouncycastle.pkcs.PKCS10CertificationRequestBuilder;
+import com.google.common.annotations.VisibleForTesting;
 
 class CertificateGenerator {
     private static final int VALIDITY_PERIOD = 7 * 24 * 60 * 60 * 1000; // one week
@@ -37,6 +38,7 @@ class CertificateGenerator {
      * @param keyPair used to generate certificate: public key in certificate, sign with private key (self signed)
      * @return a self signed {@link X509Certificate}
      */
+    @VisibleForTesting
     static X509Certificate generateX509V1Certificate(KeyPair keyPair) throws Exception {
         BigInteger serial = BigInteger.valueOf(System.currentTimeMillis());
         X509v1CertificateBuilder x509v1CertificateBuilder = new X509v1CertificateBuilder(new X500Name("CN=Test Certificate"), serial, START_DATE, END_DATE,
@@ -51,6 +53,7 @@ class CertificateGenerator {
     /**
      * Same source code as {@code generateX509V1Certificate} but with a V3 of X.509: root CA certificate (V3 version of X.509 self signed certificate)
      */
+    @VisibleForTesting
     static X509Certificate generateRootCert(KeyPair keyPair, String subjectValue) throws Exception {
         X500Name x500Name = new X500Name(subjectValue);
         BigInteger serial = BigInteger.valueOf(System.currentTimeMillis());
@@ -71,6 +74,7 @@ class CertificateGenerator {
     /**
      * Create an intermediate CA, sign by root CA, used to sign other certificates
      */
+    @VisibleForTesting
     static X509Certificate generateIntermediateCA(KeyPair keyPair, KeyPair caRootKeyPair, X509Certificate caCert, String subjectValue) throws Exception {
         ContentSigner contentSigner = new JcaContentSignerBuilder(SIGNATURE_ALGORITHM).build(caRootKeyPair.getPrivate());
 
@@ -107,6 +111,7 @@ class CertificateGenerator {
     /**
      * Create basic certificate signed by intermediate CA
      */
+    @VisibleForTesting
     static X509Certificate generateEndEntityCert(KeyPair keyPair, KeyPair intermediateCaKeyPair, X509Certificate intermediateCaKeyCertificate,
                                                  String subjectValue) throws Exception {
         ContentSigner contentSigner = new JcaContentSignerBuilder(SIGNATURE_ALGORITHM).build(intermediateCaKeyPair.getPrivate());

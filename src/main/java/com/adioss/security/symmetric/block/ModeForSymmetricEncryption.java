@@ -5,6 +5,7 @@ import javax.crypto.spec.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.adioss.security.Utils;
+import com.google.common.annotations.VisibleForTesting;
 
 import static com.adioss.security.symmetric.SymmetricEncryptConstant.INPUT;
 import static com.adioss.security.symmetric.SymmetricEncryptTools.*;
@@ -16,6 +17,7 @@ class ModeForSymmetricEncryption {
      * Symmetric encrypt by block with ECB mode: PKCS7 Padding using DES cipher
      * Problem: show that we can discovering patterns
      */
+    @VisibleForTesting
     static void encryptWithECB() throws Exception {
         LOG.debug("encryptWithECB");
         byte[] keyBytes = new byte[]{0x01, 0x23, 0x45, 0x67, (byte) 0x89, (byte) 0xab, (byte) 0xcd, (byte) 0xef};
@@ -32,6 +34,7 @@ class ModeForSymmetricEncryption {
     /**
      * Symmetric encrypt by block with CBC mode: PKCS7 Padding using DES cipher and IV
      */
+    @VisibleForTesting
     static void encryptWithCBC() throws Exception {
         LOG.debug("encryptWithCBC");
         byte[] keyBytes = new byte[]{0x01, 0x23, 0x45, 0x67, (byte) 0x89, (byte) 0xab, (byte) 0xcd, (byte) 0xef};
@@ -48,6 +51,7 @@ class ModeForSymmetricEncryption {
     /**
      * Symmetric encrypt by block with CBC mode: PKCS7 Padding using DES cipher and secure random IV
      */
+    @VisibleForTesting
     static void encryptWithCBCWithSecureRandomIV() throws Exception {
         LOG.debug("encryptWithCBCWithSecureRandomIV");
         byte[] keyBytes = new byte[]{0x01, 0x23, 0x45, 0x67, (byte) 0x89, (byte) 0xab, (byte) 0xcd, (byte) 0xef};
@@ -65,6 +69,7 @@ class ModeForSymmetricEncryption {
     /**
      * Symmetric encrypt by block with CTS mode: no padding using DES cipher and IV
      */
+    @VisibleForTesting
     static void encryptWithCTS() throws Exception {
         LOG.debug("encryptWithCTS");
         byte[] keyBytes = new byte[]{0x01, 0x23, 0x45, 0x67, (byte) 0x89, (byte) 0xab, (byte) 0xcd, (byte) 0xef};
@@ -81,6 +86,7 @@ class ModeForSymmetricEncryption {
     /**
      * Symmetric encrypt by block with CTR mode: no padding using DES cipher and IV
      */
+    @VisibleForTesting
     static void encryptWithCTR() throws Exception {
         LOG.debug("encryptWithCBC");
         byte[] keyBytes = new byte[]{0x01, 0x23, 0x45, 0x67, (byte) 0x89, (byte) 0xab, (byte) 0xcd, (byte) 0xef};

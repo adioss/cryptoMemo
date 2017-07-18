@@ -12,12 +12,14 @@ import javax.crypto.spec.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.adioss.security.Utils;
+import com.google.common.annotations.VisibleForTesting;
 
 class ElGamalAlgorithm {
     private static final Logger LOG = LoggerFactory.getLogger(ElGamalAlgorithm.class);
     private static final String EL_GAMAL_CIPHER = "ElGamal/None/NoPadding";
     private static final String EL_GAMAL_ALGORITHM = "ElGamal";
 
+    @VisibleForTesting
     static void encryptDecryptWithElGamal() throws Exception {
         byte[] input = new byte[]{(byte) 0xbe, (byte) 0xef};
         Cipher cipher = Cipher.getInstance(EL_GAMAL_CIPHER);
@@ -43,6 +45,7 @@ class ElGamalAlgorithm {
         LOG.debug("plain : " + Utils.toHex(plainText));
     }
 
+    @VisibleForTesting
     static void encryptDecryptWithElGamalWithParameters() throws Exception {
         byte[] input = new byte[]{(byte) 0xbe, (byte) 0xef};
         Cipher cipher = Cipher.getInstance(EL_GAMAL_CIPHER);

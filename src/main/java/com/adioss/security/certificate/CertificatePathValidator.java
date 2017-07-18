@@ -19,6 +19,7 @@ import java.util.*;
 import javax.security.auth.x500.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.google.common.annotations.VisibleForTesting;
 
 import static java.util.Arrays.*;
 import static java.util.Collections.*;
@@ -34,6 +35,7 @@ class CertificatePathValidator {
      * @param trustedRootCert the {@link X509Certificate} root CA issuer certificate used to create chain of trust, used as {@link TrustAnchor}. Must be self-signed.
      * @param intermediateCerts list of {@link X509Certificate} intermediate CA certificates used to create chain of trust, added to {@link PKIXParameters#addCertStore}. Can not be self-signed.
      */
+    @VisibleForTesting
     static boolean validatePathWithBuilder(X509Certificate endEntityCertificate, X509Certificate trustedRootCert, X509Certificate... intermediateCerts)
             throws Exception {
         try {
@@ -79,6 +81,7 @@ class CertificatePathValidator {
     }
 
     @SuppressWarnings("SameParameterValue")
+    @VisibleForTesting
     static boolean validatePathWithBuilder(String endEntityCertificate, X509Certificate... certificates) throws Exception {
         try {
             // Create the selector that specifies the certificate that we want to match
@@ -123,6 +126,7 @@ class CertificatePathValidator {
      * @param endEntityCertificate the {@link X509Certificate} to validate
      * @param keyStore {@link KeyStore} that contain the list of all {@link X509Certificate} issuers used to create chain of trust.
      */
+    @VisibleForTesting
     static boolean manuallyValidatePaths(X509Certificate endEntityCertificate, KeyStore keyStore) throws Exception {
         Enumeration<String> alias = keyStore.aliases();
 

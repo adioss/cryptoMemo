@@ -5,10 +5,12 @@ import javax.crypto.spec.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.adioss.security.Utils;
+import com.google.common.annotations.VisibleForTesting;
 
 class SymmetricBlockEncryption {
     private static final Logger LOG = LoggerFactory.getLogger(SymmetricBlockEncryption.class);
 
+    @VisibleForTesting
     static void encryptWithSimpleSymmetricEncryption() throws Exception {
         byte[] input = new byte[]{0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, (byte) 0x88, (byte) 0x99, (byte) 0xaa, (byte) 0xbb, (byte) 0xcc, (byte) 0xdd,
                 (byte) 0xee, (byte) 0xff};

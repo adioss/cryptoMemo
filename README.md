@@ -7,9 +7,13 @@
 [![Sonarcloud Tech Debt](https://sonarcloud.io/api/badges/measure?key=com.adioss.security:cryptography&metric=sqale_debt_ratio)](https://sonarcloud.io/project/issues?facetMode=effort&id=com.adioss.security%3Acryptography&resolved=false&types=CODE_SMELL)
 
 # cryptoMemo
-Java sample for symmetric and asymmetric cryptography
+Java samples for 
+* digest
+* symmetric (flow/block) and asymmetric(RSA, DSA, DH, ElGamal) cryptography
+* certificate management (creation, path validation, revocation)
+* miscellaneous: crack jks
 
-Doc:
-https://docs.oracle.com/javase/8/docs/technotes/guides/security/crypto/CryptoSpec.html
-http://docs.oracle.com/javase/8/docs/technotes/guides/security/SunProviders.html
+Main docs:
+* https://docs.oracle.com/javase/8/docs/technotes/guides/security/crypto/CryptoSpec.html
+* http://docs.oracle.com/javase/8/docs/technotes/guides/security/SunProviders.html
 

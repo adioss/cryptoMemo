@@ -6,6 +6,7 @@ import javax.crypto.spec.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.adioss.security.Utils;
+import com.google.common.annotations.VisibleForTesting;
 
 import static com.adioss.security.symmetric.SymmetricEncryptConstant.INPUT;
 
@@ -15,6 +16,7 @@ class KeyGeneration {
     /**
      * Use {@link KeyGenerator} to create a key
      */
+    @VisibleForTesting
     static void encryptWithKeyGenerator() throws Exception {
         byte[] ivBytes = Utils.generateSecureRandomBytes(16);
         Cipher cipher = Cipher.getInstance("AES/CTR/NoPadding");

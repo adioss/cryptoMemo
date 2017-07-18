@@ -15,6 +15,7 @@ import org.bouncycastle.cert.jcajce.JcaX509CRLConverter;
 import org.bouncycastle.cert.jcajce.JcaX509ExtensionUtils;
 import org.bouncycastle.operator.ContentSigner;
 import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
+import com.google.common.annotations.VisibleForTesting;
 
 class CRLGenerator {
     private static final String SIGNATURE_ALGORITHM = "SHA256WithRSAEncryption";
@@ -26,6 +27,7 @@ class CRLGenerator {
      * @param issuerKeyPair the keypair of the issuer, used the sign generated CRL
      * @param userCertificateSerials list of certificate serials to revoke
      */
+    @VisibleForTesting
     static X509CRL createCRL(X509Certificate issuerCertificate, KeyPair issuerKeyPair, BigInteger... userCertificateSerials) throws Exception {
         Date now = new Date();
         ContentSigner contentSigner = new JcaContentSignerBuilder(SIGNATURE_ALGORITHM).build(issuerKeyPair.getPrivate());

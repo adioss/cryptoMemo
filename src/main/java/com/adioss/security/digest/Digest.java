@@ -8,6 +8,7 @@ import javax.crypto.spec.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.adioss.security.Utils;
+import com.google.common.annotations.VisibleForTesting;
 
 import static java.lang.String.format;
 
@@ -22,6 +23,7 @@ class Digest {
      * Append the input to message digest with update
      * Complete cipher text with message digest(java.security.MessageDigest#digest()) with doFinal method
      */
+    @VisibleForTesting
     static void encryptDecryptWithDigest() throws Exception {
 
         IvParameterSpec ivParameterSpec = Utils.createIvForAES(1, SECURE_RANDOM);
@@ -59,6 +61,7 @@ class Digest {
      * Append the input to cipher with update + doFinal
      * Complete cipher text with message digest(java.security.MessageDigest#digest()) with doFinal method
      */
+    @VisibleForTesting
     static void encryptDecryptWithHMac() throws Exception {
         SecureRandom random = new SecureRandom();
         IvParameterSpec ivSpec = Utils.createIvForAES(1, random);

@@ -5,6 +5,7 @@ import javax.crypto.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.adioss.security.Utils;
+import com.google.common.annotations.VisibleForTesting;
 
 class KeyWrapper {
     private static final Logger LOG = LoggerFactory.getLogger(KeyWrapper.class);
@@ -14,6 +15,7 @@ class KeyWrapper {
      * Create another key, use a cipher with it and {@link Cipher#WRAP_MODE} and wrap the original key
      * To unwrap, use a cipher with {@link Cipher#UNWRAP_MODE}
      */
+    @VisibleForTesting
     static void wrapUnwrapKey() throws Exception {
         // create a key to wrap
         KeyGenerator generator = KeyGenerator.getInstance("AES");

@@ -18,6 +18,7 @@ import javax.crypto.spec.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.adioss.security.Utils;
+import com.google.common.annotations.VisibleForTesting;
 
 /**
  * RSA: Rivest, Shamir, Adleman
@@ -29,6 +30,7 @@ class RSAAlgorithm {
     /**
      * RSA public/private key generated
      */
+    @VisibleForTesting
     static void encryptDecryptWithPublicPrivateRSAKeysGenerated() throws Exception {
         Cipher cipher = Cipher.getInstance("RSA");
 
@@ -55,6 +57,7 @@ class RSAAlgorithm {
     /**
      * RSA public/private exponent manually generated
      */
+    @VisibleForTesting
     static void encryptDecryptWithPublicPrivateRSAKeysWithExponentManuallyGenerated() throws Exception {
         int keySize = 512;
         SecureRandom random = new SecureRandom();
@@ -96,6 +99,7 @@ class RSAAlgorithm {
     /**
      * Symmetric key exchange process using asymmetric key exchange
      */
+    @VisibleForTesting
     static void encryptDecryptWrappedSymmetricWithAsymmetricKey() throws Exception {
         SecureRandom random = Utils.createFixedRandom();
 
@@ -137,6 +141,7 @@ class RSAAlgorithm {
      * Pb is that input is converted to Integer so "00" are escaped on conversion so we use padding to keep them
      * Example here with PKCS1 Padding
      */
+    @VisibleForTesting
     static void encryptDecryptWithPublicPrivatePKCS1Padding() throws Exception {
         // TODO try with bigger input (text or...)
         Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");

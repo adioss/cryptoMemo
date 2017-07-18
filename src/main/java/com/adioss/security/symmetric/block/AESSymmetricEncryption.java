@@ -5,6 +5,7 @@ import javax.crypto.*;
 import javax.crypto.spec.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.google.common.annotations.VisibleForTesting;
 
 class AESSymmetricEncryption {
     private static final Logger LOG = LoggerFactory.getLogger(AESSymmetricEncryption.class);
@@ -15,6 +16,7 @@ class AESSymmetricEncryption {
 
     private static final byte[] MESSAGE = "Hello!!".getBytes();
 
+    @VisibleForTesting
     static void encryptDecryptECB() throws Exception {
         SecretKey secretKey = new SecretKeySpec(KEY, "AES");
 
@@ -28,6 +30,7 @@ class AESSymmetricEncryption {
         LOG.debug("plain: " + show(original) + "        " + new String(original));
     }
 
+    @VisibleForTesting
     static void encryptDecryptCBC() throws Exception {
         SecretKey secretKey = new SecretKeySpec(KEY, "AES");
 
@@ -41,6 +44,7 @@ class AESSymmetricEncryption {
         LOG.debug("plain: " + show(original) + "        " + new String(original));
     }
 
+    @VisibleForTesting
     static void encryptDecryptGCM() throws Exception {
         SecureRandom random = SecureRandom.getInstanceStrong();
         SecretKey secretKey = new SecretKeySpec(KEY, "AES");
