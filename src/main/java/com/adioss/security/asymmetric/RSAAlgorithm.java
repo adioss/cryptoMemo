@@ -168,6 +168,7 @@ class RSAAlgorithm {
         LOG.debug("plain : " + Utils.toHex(plainText));
     }
 
+    @VisibleForTesting
     static void encryptDecryptWithPublicPrivateOAEPPadding() throws Exception {
         Cipher cipher = Cipher.getInstance("RSA/ECB/OAEPWithSHA1AndMGF1Padding");
         SecureRandom random = Utils.createFixedRandom();

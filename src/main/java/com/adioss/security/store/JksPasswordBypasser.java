@@ -5,6 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.google.common.annotations.VisibleForTesting;
 
 import static java.lang.String.format;
 
@@ -12,6 +13,7 @@ public class JksPasswordBypasser {
     private static final Logger LOG = LoggerFactory.getLogger(JksPasswordBypasser.class);
     private static final String EMPTY_PASSWORD = "";
 
+    @VisibleForTesting
     static void copyStoreToUnProtected(String keyStoreFilePath) throws Exception {
         JksContentManager jksContentManager = new JksContentManager();
 

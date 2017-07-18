@@ -146,6 +146,7 @@ class CertificatePathValidator {
      * @param endEntityCertificate the {@link X509Certificate} to validate
      * @param trustedCerts list of all {@link X509Certificate} issuers used to create chain of trust.
      */
+    @VisibleForTesting
     static boolean manuallyValidatePaths(X509Certificate endEntityCertificate, List<X509Certificate> trustedCerts) {
         Optional<X509Certificate> trusted = trustedCerts.stream().filter(tc -> endEntityCertificate.getIssuerDN().equals(tc.getSubjectDN())).findFirst();
         if (trusted.isPresent()) {
