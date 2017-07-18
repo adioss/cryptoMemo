@@ -5,9 +5,14 @@ import java.security.MessageDigest;
 import java.security.SecureRandom;
 import javax.crypto.*;
 import javax.crypto.spec.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.adioss.security.Utils;
 
-public class Digest {
+import static java.lang.String.format;
+
+class Digest {
+    private static final Logger LOG = LoggerFactory.getLogger(Digest.class);
     private static final SecureRandom SECURE_RANDOM = new SecureRandom();
 
     /**
@@ -23,7 +28,7 @@ public class Digest {
         Key key = Utils.createKeyForAES(SECURE_RANDOM);
         String input = "Validate with digested data.....";
         MessageDigest messageDigest = MessageDigest.getInstance("SHA-1");
-        System.out.println("input : " + input);
+        LOG.debug("input : " + input);
 
         // encryption step
         Cipher cipher = Cipher.getInstance("AES/CTR/NoPadding");
@@ -44,7 +49,7 @@ public class Digest {
         byte[] messageHash = new byte[messageDigest.getDigestLength()];
         System.arraycopy(plainText, messageLength, messageHash, 0, messageHash.length);
         // message digest is false (see java.security.MessageDigest.isEqual)
-        System.out.printf("plain : %s verified: %s%n", Utils.toString(plainText, messageLength), MessageDigest.isEqual(messageDigest.digest(), messageHash));
+        LOG.debug(format("plain : %s verified: %s%n", Utils.toString(plainText, messageLength), MessageDigest.isEqual(messageDigest.digest(), messageHash)));
     }
 
     /**
@@ -59,7 +64,7 @@ public class Digest {
         IvParameterSpec ivSpec = Utils.createIvForAES(1, random);
         Key key = Utils.createKeyForAES(128, random);
         String input = "Validate with digested data.....";
-        System.out.println("input : " + input);
+        LOG.debug("input : " + input);
 
         // mac generation
         Mac mac = Mac.getInstance("HmacSHA512");
@@ -67,7 +72,7 @@ public class Digest {
         Key macKey = new SecretKeySpec(macKeyBytes, "HmacSHA512");
         mac.init(macKey);
         mac.update(Utils.toByteArray(input));
-        System.out.println("MacLength : " + mac.getMacLength());
+        LOG.debug("MacLength : " + mac.getMacLength());
 
         // encryption step
         Cipher cipher = Cipher.getInstance("AES/CTR/NoPadding");
@@ -84,11 +89,9 @@ public class Digest {
         mac.update(plainText, 0, messageLength);
         byte[] messageHash = new byte[mac.getMacLength()];
         System.arraycopy(plainText, messageLength, messageHash, 0, messageHash.length);
-        System.out.println("plain : " + Utils.toString(plainText, messageLength) + " verified: " + MessageDigest.isEqual(mac.doFinal(), messageHash));
+        LOG.debug("plain : " + Utils.toString(plainText, messageLength) + " verified: " + MessageDigest.isEqual(mac.doFinal(), messageHash));
     }
 
-    public static void main(String[] args) throws Exception {
-        encryptDecryptWithDigest();
-        encryptDecryptWithHMac();
+    private Digest() {
     }
 }

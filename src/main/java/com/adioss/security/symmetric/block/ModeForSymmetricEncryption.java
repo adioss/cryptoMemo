@@ -2,18 +2,22 @@ package com.adioss.security.symmetric.block;
 
 import javax.crypto.*;
 import javax.crypto.spec.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.adioss.security.Utils;
 
 import static com.adioss.security.symmetric.SymmetricEncryptConstant.INPUT;
 import static com.adioss.security.symmetric.SymmetricEncryptTools.*;
 
-public class ModeForSymmetricEncryption {
+class ModeForSymmetricEncryption {
+    private static final Logger LOG = LoggerFactory.getLogger(ModeForSymmetricEncryption.class);
+
     /**
      * Symmetric encrypt by block with ECB mode: PKCS7 Padding using DES cipher
      * Problem: show that we can discovering patterns
      */
     static void encryptWithECB() throws Exception {
-        System.out.println("encryptWithECB");
+        LOG.debug("encryptWithECB");
         byte[] keyBytes = new byte[]{0x01, 0x23, 0x45, 0x67, (byte) 0x89, (byte) 0xab, (byte) 0xcd, (byte) 0xef};
 
         SecretKeySpec key = new SecretKeySpec(keyBytes, "DES");
@@ -29,7 +33,7 @@ public class ModeForSymmetricEncryption {
      * Symmetric encrypt by block with CBC mode: PKCS7 Padding using DES cipher and IV
      */
     static void encryptWithCBC() throws Exception {
-        System.out.println("encryptWithCBC");
+        LOG.debug("encryptWithCBC");
         byte[] keyBytes = new byte[]{0x01, 0x23, 0x45, 0x67, (byte) 0x89, (byte) 0xab, (byte) 0xcd, (byte) 0xef};
         byte[] ivBytes = Utils.generateSecureRandomBytes(8);
 
@@ -45,7 +49,7 @@ public class ModeForSymmetricEncryption {
      * Symmetric encrypt by block with CBC mode: PKCS7 Padding using DES cipher and secure random IV
      */
     static void encryptWithCBCWithSecureRandomIV() throws Exception {
-        System.out.println("encryptWithCBCWithSecureRandomIV");
+        LOG.debug("encryptWithCBCWithSecureRandomIV");
         byte[] keyBytes = new byte[]{0x01, 0x23, 0x45, 0x67, (byte) 0x89, (byte) 0xab, (byte) 0xcd, (byte) 0xef};
         byte[] ivBytes = Utils.generateSecureRandomBytes(8);
 
@@ -62,7 +66,7 @@ public class ModeForSymmetricEncryption {
      * Symmetric encrypt by block with CTS mode: no padding using DES cipher and IV
      */
     static void encryptWithCTS() throws Exception {
-        System.out.println("encryptWithCTS");
+        LOG.debug("encryptWithCTS");
         byte[] keyBytes = new byte[]{0x01, 0x23, 0x45, 0x67, (byte) 0x89, (byte) 0xab, (byte) 0xcd, (byte) 0xef};
         byte[] ivBytes = Utils.generateSecureRandomBytes(8);
 
@@ -78,7 +82,7 @@ public class ModeForSymmetricEncryption {
      * Symmetric encrypt by block with CTR mode: no padding using DES cipher and IV
      */
     static void encryptWithCTR() throws Exception {
-        System.out.println("encryptWithCBC");
+        LOG.debug("encryptWithCBC");
         byte[] keyBytes = new byte[]{0x01, 0x23, 0x45, 0x67, (byte) 0x89, (byte) 0xab, (byte) 0xcd, (byte) 0xef};
         byte[] ivBytes = new byte[]{0x07, 0x06, 0x05, 0x04, 0x03, 0x02, 0x01, 0x00};
 
@@ -90,11 +94,6 @@ public class ModeForSymmetricEncryption {
         encryptDecryptWithIV(INPUT, key, ivSpec, cipher);
     }
 
-    public static void main(String[] args) throws Exception {
-        encryptWithECB();
-        encryptWithCBC();
-        encryptWithCBCWithSecureRandomIV();
-        encryptWithCTS();
-        encryptWithCTR();
+    private ModeForSymmetricEncryption() {
     }
 }

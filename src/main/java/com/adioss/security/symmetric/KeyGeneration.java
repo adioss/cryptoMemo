@@ -3,11 +3,15 @@ package com.adioss.security.symmetric;
 import java.security.Key;
 import javax.crypto.*;
 import javax.crypto.spec.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.adioss.security.Utils;
 
 import static com.adioss.security.symmetric.SymmetricEncryptConstant.INPUT;
 
-public class KeyGeneration {
+class KeyGeneration {
+    private static final Logger LOG = LoggerFactory.getLogger(KeyGeneration.class);
+
     /**
      * Use {@link KeyGenerator} to create a key
      */
@@ -17,8 +21,8 @@ public class KeyGeneration {
         KeyGenerator generator = KeyGenerator.getInstance("AES");
         generator.init(128);
         Key encryptionKey = generator.generateKey();
-        System.out.println("key     : " + Utils.toHex(encryptionKey.getEncoded()));
-        System.out.println("input   : " + Utils.toHex(INPUT));
+        LOG.debug("key     : " + Utils.toHex(encryptionKey.getEncoded()));
+        LOG.debug("input   : " + Utils.toHex(INPUT));
 
         // encryption pass
         cipher.init(Cipher.ENCRYPT_MODE, encryptionKey, new IvParameterSpec(ivBytes));
@@ -33,11 +37,7 @@ public class KeyGeneration {
         byte[] plainText = new byte[cipher.getOutputSize(cipherTextLength)];
         int plainTextLength = cipher.update(cipherText, 0, cipherTextLength, plainText, 0);
         plainTextLength += cipher.doFinal(plainText, plainTextLength);
-        System.out.println("plain   : " + Utils.toHex(plainText, plainTextLength) + " bytes: " + plainTextLength);
-    }
-
-    public static void main(String[] args) throws Exception {
-        encryptWithKeyGenerator();
+        LOG.debug("plain   : " + Utils.toHex(plainText, plainTextLength) + " bytes: " + plainTextLength);
     }
 
     private KeyGeneration() {

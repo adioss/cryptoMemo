@@ -10,7 +10,6 @@ public class DigitalSignatureAlgorithmTest {
             DigitalSignatureAlgorithm.createValidateSignatureWithDSA();
         } catch (Exception e) {
             Assert.fail("WHOOPS! Threw " + e.toString());
-            e.printStackTrace();
         }
     }
 
@@ -20,7 +19,6 @@ public class DigitalSignatureAlgorithmTest {
             DigitalSignatureAlgorithm.createValidateSignatureWithPKCS1();
         } catch (Exception e) {
             Assert.fail("WHOOPS! Threw " + e.toString());
-            e.printStackTrace();
         }
     }
 }

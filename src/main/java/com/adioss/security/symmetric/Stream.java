@@ -3,9 +3,13 @@ package com.adioss.security.symmetric;
 import java.io.*;
 import javax.crypto.*;
 import javax.crypto.spec.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.adioss.security.Utils;
 
-public class Stream {
+class Stream {
+    private static final Logger LOG = LoggerFactory.getLogger(Stream.class);
+
     static void streamEncryptDecrypt() throws Exception {
         ByteArrayOutputStream byteArrayOutputStream;
 
@@ -19,7 +23,7 @@ public class Stream {
         SecretKeySpec key = new SecretKeySpec(keyBytes, "AES");
         IvParameterSpec ivParameterSpec = new IvParameterSpec(ivBytes);
         Cipher cipher = Cipher.getInstance("AES/CTR/NoPadding");
-        System.out.println("input : " + Utils.toHex(input));
+        LOG.debug("input : " + Utils.toHex(input));
 
         // encryption pass
         cipher.init(Cipher.ENCRYPT_MODE, key, ivParameterSpec);
@@ -30,7 +34,7 @@ public class Stream {
             byteArrayOutputStream1.write(character);
         }
         byte[] cipherText = byteArrayOutputStream1.toByteArray();
-        System.out.println("cipher: " + Utils.toHex(cipherText));
+        LOG.debug("cipher: " + Utils.toHex(cipherText));
 
         // decryption pass
         cipher.init(Cipher.DECRYPT_MODE, key, ivParameterSpec);
@@ -38,11 +42,7 @@ public class Stream {
         try (CipherOutputStream cipherOutputStream = new CipherOutputStream(byteArrayOutputStream, cipher)) {
             cipherOutputStream.write(cipherText);
         }
-        System.out.println("plain: " + Utils.toHex(byteArrayOutputStream.toByteArray()));
-    }
-
-    public static void main(String[] args) throws Exception {
-        streamEncryptDecrypt();
+        LOG.debug("plain: " + Utils.toHex(byteArrayOutputStream.toByteArray()));
     }
 
     private Stream() {

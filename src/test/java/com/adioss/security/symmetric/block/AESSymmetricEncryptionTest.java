@@ -10,7 +10,6 @@ public class AESSymmetricEncryptionTest {
             AESSymmetricEncryption.encryptDecryptECB();
         } catch (Exception e) {
             Assert.fail("WHOOPS! Threw " + e.toString());
-            e.printStackTrace();
         }
     }
 
@@ -20,7 +19,6 @@ public class AESSymmetricEncryptionTest {
             AESSymmetricEncryption.encryptDecryptCBC();
         } catch (Exception e) {
             Assert.fail("WHOOPS! Threw " + e.toString());
-            e.printStackTrace();
         }
     }
 
@@ -30,7 +28,6 @@ public class AESSymmetricEncryptionTest {
             AESSymmetricEncryption.encryptDecryptGCM();
         } catch (Exception e) {
             Assert.fail("WHOOPS! Threw " + e.toString());
-            e.printStackTrace();
         }
     }
 

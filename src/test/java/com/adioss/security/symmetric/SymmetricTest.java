@@ -14,7 +14,6 @@ public class SymmetricTest {
             KeyGeneration.encryptWithKeyGenerator();
         } catch (Exception e) {
             Assert.fail("WHOOPS! Threw " + e.toString());
-            e.printStackTrace();
         }
     }
 
@@ -24,7 +23,6 @@ public class SymmetricTest {
             KeyWrapper.wrapUnwrapKey();
         } catch (Exception e) {
             Assert.fail("WHOOPS! Threw " + e.toString());
-            e.printStackTrace();
         }
     }
 
@@ -34,7 +32,6 @@ public class SymmetricTest {
             SimpleCipherTest.test();
         } catch (Exception e) {
             Assert.fail("WHOOPS! Threw " + e.toString());
-            e.printStackTrace();
         }
     }
 
@@ -45,7 +42,6 @@ public class SymmetricTest {
             SimpleCipherTest.test();
         } catch (Exception e) {
             Assert.fail("WHOOPS! Threw " + e.toString());
-            e.printStackTrace();
         }
     }
 
@@ -62,7 +58,7 @@ public class SymmetricTest {
         byte[] encryptedData = PBEEncryption.encrypt(plaintext, password, salt, iterationCount);
         // Then
         byte[] decryptedData = PBEEncryption.decrypt(encryptedData, password, salt, iterationCount);
-        System.out.println("Decrypted data: " + new String(decryptedData));
+        //System.out.println("Decrypted data: " + new String(decryptedData));
         Assert.assertEquals(plaintext, new String(decryptedData));
     }
 
@@ -85,7 +81,7 @@ public class SymmetricTest {
 
         // Then
         byte[] decryptedData = PBKDF2Derivation.decrypt(key, iv, encryptedData);
-        System.out.println("Decrypted data: " + new String(decryptedData));
+        //System.out.println("Decrypted data: " + new String(decryptedData));
         Assert.assertEquals(plaintext, new String(decryptedData));
     }
 }

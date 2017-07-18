@@ -4,11 +4,14 @@ import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.SecureRandom;
 import java.security.Signature;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.adioss.security.Utils;
 
 import static com.adioss.security.SignatureSUNConstant.SHA1withRSA;
 
-public class DigitalSignatureAlgorithm {
+class DigitalSignatureAlgorithm {
+    private static final Logger LOG = LoggerFactory.getLogger(DigitalSignatureAlgorithm.class);
     /**
      * DSA: Digital Signature Algorithm
      */
@@ -28,9 +31,9 @@ public class DigitalSignatureAlgorithm {
         signature.initVerify(keyPair.getPublic());
         signature.update(message);
         if (signature.verify(signatureBytes)) {
-            System.out.println("signature verification succeeded.");
+            LOG.debug("signature verification succeeded.");
         } else {
-            System.out.println("signature verification failed.");
+            LOG.debug("signature verification failed.");
         }
     }
 
@@ -53,9 +56,9 @@ public class DigitalSignatureAlgorithm {
         signature.initVerify(keyPair.getPublic());
         signature.update(message);
         if (signature.verify(signatureBytes)) {
-            System.out.println("signature verification succeeded.");
+            LOG.debug("signature verification succeeded.");
         } else {
-            System.out.println("signature verification failed.");
+            LOG.debug("signature verification failed.");
         }
     }
 

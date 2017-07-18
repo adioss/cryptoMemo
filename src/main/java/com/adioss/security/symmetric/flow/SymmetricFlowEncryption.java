@@ -6,7 +6,7 @@ import com.adioss.security.symmetric.SymmetricEncryptTools;
 
 import static com.adioss.security.symmetric.SymmetricEncryptConstant.INPUT;
 
-public class SymmetricFlowEncryption {
+class SymmetricFlowEncryption {
     /**
      * Symmetric encrypt by flow with ARC4 cypher
      */
@@ -18,7 +18,6 @@ public class SymmetricFlowEncryption {
         SymmetricEncryptTools.simpleEncryptDecrypt(INPUT, key, cipher);
     }
 
-    public static void main(String[] args) throws Exception {
-        encryptWithSimpleSymmetricEncryption();
+    private SymmetricFlowEncryption() {
     }
 }

@@ -17,11 +17,14 @@ import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.*;
 import javax.security.auth.x500.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static java.util.Arrays.*;
 import static java.util.Collections.*;
 
 class CertificatePathValidator {
+    private static final Logger LOG = LoggerFactory.getLogger(CertificatePathValidator.class);
 
     /**
      * Validate paths of certificate chain of trust using a {@link CertPathBuilder}:
@@ -70,7 +73,7 @@ class CertificatePathValidator {
             return pathBuilderResult != null;
         } catch (Exception e) {
             // Impossible to build path correctly
-            e.printStackTrace();
+            LOG.error("Impossible to build path correctly", e);
             return false;
         }
     }
@@ -108,7 +111,7 @@ class CertificatePathValidator {
             return pathBuilderResult != null;
         } catch (Exception e) {
             // Impossible to build path correctly
-            e.printStackTrace();
+            LOG.error("Impossible to build path correctly", e);
             return false;
         }
     }
@@ -149,12 +152,10 @@ class CertificatePathValidator {
             }
             // If trusted/issuer certificate is self signed, we are at the top of paths validation (root CA)
             if (isSelfSigned(issuerCertificate) && validatePath(issuerCertificate, issuerCertificate)) {
-                //System.out.println(client.getSubjectDN() + " validated by root:" + issuerCertificate.getSubjectX500Principal().getName());
                 return true;
             }
 
             // Validate issuer
-            //System.out.println(client.getSubjectDN() + " validated by:" + issuerCertificate.getSubjectX500Principal().getName());
             return manuallyValidatePaths(issuerCertificate, trustedCerts);
         }
         return false;
@@ -176,7 +177,7 @@ class CertificatePathValidator {
             // Validation
             certPathValidator.validate(certPath, pkixParameters);
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error(e.getMessage());
             return false;
         }
         return true;

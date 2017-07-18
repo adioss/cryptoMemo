@@ -4,7 +4,6 @@ import javax.crypto.*;
 import javax.crypto.spec.*;
 
 class PBEEncryption {
-
     private static final String PBE_ALGORITHM = "PBEWithMD5AndDES";
 
     static byte[] encrypt(String plaintext, String password, byte[] salt, int iterationCount) throws Exception {
@@ -23,5 +22,8 @@ class PBEEncryption {
         Cipher cipher = Cipher.getInstance(PBE_ALGORITHM);
         cipher.init(Cipher.DECRYPT_MODE, secretKey, new PBEParameterSpec(salt, iterationCount));
         return cipher.doFinal(cipherText);
+    }
+
+    private PBEEncryption() {
     }
 }

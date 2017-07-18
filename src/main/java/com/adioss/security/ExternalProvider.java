@@ -3,6 +3,8 @@ package com.adioss.security;
 import java.security.Provider;
 import java.security.Security;
 import javax.crypto.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * To append new cipher provider,
@@ -10,6 +12,7 @@ import javax.crypto.*;
  * - modify java.security and add a new security provider. For ex: security.provider.11=org.bouncycastle.jce.provider.BouncyCastleProvider
  */
 class ExternalProvider {
+    private static final Logger LOG = LoggerFactory.getLogger(ExternalProvider.class);
 
     /**
      * Test the external provider installation
@@ -18,9 +21,9 @@ class ExternalProvider {
         String providerName = "BC";
 
         if (Security.getProvider(providerName) == null) {
-            System.out.println(providerName + " provider not installed");
+            LOG.debug(providerName + " provider not installed");
         } else {
-            System.out.println(providerName + " is installed.");
+            LOG.debug(providerName + " is installed.");
         }
     }
 
@@ -30,10 +33,10 @@ class ExternalProvider {
      */
     static void testProviderPriority() throws Exception {
         Cipher cipher = Cipher.getInstance("Blowfish/ECB/NoPadding");
-        System.out.println(cipher.getProvider());
+        LOG.debug(cipher.getProvider().getName());
 
         cipher = Cipher.getInstance("Blowfish/ECB/NoPadding", "BC");
-        System.out.println(cipher.getProvider());
+        LOG.debug(cipher.getProvider().getName());
     }
 
     /**
@@ -49,7 +52,7 @@ class ExternalProvider {
             }
             String factoryClass = entry.substring(0, entry.indexOf('.'));
             String name = entry.substring(factoryClass.length() + 1);
-            System.out.println(factoryClass + ": " + name);
+            LOG.debug(factoryClass + ": " + name);
         }
     }
 

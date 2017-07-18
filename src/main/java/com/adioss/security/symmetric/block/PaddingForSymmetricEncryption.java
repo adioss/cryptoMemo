@@ -2,9 +2,13 @@ package com.adioss.security.symmetric.block;
 
 import javax.crypto.*;
 import javax.crypto.spec.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.adioss.security.Utils;
 
-public class PaddingForSymmetricEncryption {
+class PaddingForSymmetricEncryption {
+    private static final Logger LOG = LoggerFactory.getLogger(PaddingForSymmetricEncryption.class);
+
     /**
      * Symmetric encrypt by block with PKCS7 padding
      */
@@ -15,7 +19,7 @@ public class PaddingForSymmetricEncryption {
         SecretKeySpec key = new SecretKeySpec(keyBytes, "AES");
         // here select PKCS7 padding
         Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
-        System.out.println("input : " + Utils.toHex(input));
+        LOG.debug("input : " + Utils.toHex(input));
 
         // encryption pass
         cipher.init(Cipher.ENCRYPT_MODE, key);
@@ -23,17 +27,16 @@ public class PaddingForSymmetricEncryption {
         byte[] cipherText = new byte[cipher.getOutputSize(input.length)];
         int cipherTextLength = cipher.update(input, 0, input.length, cipherText, 0);
         cipherTextLength += cipher.doFinal(cipherText, cipherTextLength);
-        System.out.println("cipher: " + Utils.toHex(cipherText) + " bytes: " + cipherTextLength);
+        LOG.debug("cipher: " + Utils.toHex(cipherText) + " bytes: " + cipherTextLength);
 
         // decryption pass
         cipher.init(Cipher.DECRYPT_MODE, key);
         byte[] plainText = new byte[cipher.getOutputSize(cipherTextLength)];
         int plainTextLength = cipher.update(cipherText, 0, cipherTextLength, plainText, 0);
         plainTextLength += cipher.doFinal(plainText, plainTextLength);
-        System.out.println("plain : " + Utils.toHex(plainText) + " bytes: " + plainTextLength);
+        LOG.debug("plain : " + Utils.toHex(plainText) + " bytes: " + plainTextLength);
     }
 
-    public static void main(String[] args) throws Exception {
-        encryptWithPadding();
+    private PaddingForSymmetricEncryption() {
     }
 }

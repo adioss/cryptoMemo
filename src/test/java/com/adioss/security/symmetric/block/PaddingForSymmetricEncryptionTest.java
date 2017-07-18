@@ -10,7 +10,6 @@ public class PaddingForSymmetricEncryptionTest {
             PaddingForSymmetricEncryption.encryptWithPadding();
         } catch (Exception e) {
             Assert.fail("WHOOPS! Threw " + e.toString());
-            e.printStackTrace();
         }
     }
 }

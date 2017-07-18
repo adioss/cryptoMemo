@@ -1,31 +1,52 @@
 package com.adioss.security.asymmetric;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 public class RSAAlgorithmTest {
 
     @Test
-    public void shouldEncryptDecryptWithPublicPrivateRSAKeysGenerated() throws Exception {
-        RSAAlgorithm.encryptDecryptWithPublicPrivateRSAKeysGenerated();
+    public void shouldEncryptDecryptWithPublicPrivateRSAKeysGenerated() {
+        try {
+            DigitalSignatureAlgorithm.createValidateSignatureWithDSA();
+        } catch (Exception e) {
+            Assert.fail("WHOOPS! Threw " + e.toString());
+        }
     }
 
     @Test
-    public void shouldEncryptDecryptWithPublicPrivateRSAKeysWithExponentManuallyGenerated() throws Exception {
-        RSAAlgorithm.encryptDecryptWithPublicPrivateRSAKeysWithExponentManuallyGenerated();
+    public void shouldEncryptDecryptWithPublicPrivateRSAKeysWithExponentManuallyGenerated() {
+        try {
+            DigitalSignatureAlgorithm.createValidateSignatureWithDSA();
+        } catch (Exception e) {
+            Assert.fail("WHOOPS! Threw " + e.toString());
+        }
     }
 
     @Test
-    public void shouldEncryptDecryptWithPublicPrivatePKCS1Padding() throws Exception {
-        RSAAlgorithm.encryptDecryptWithPublicPrivatePKCS1Padding();
+    public void shouldEncryptDecryptWithPublicPrivatePKCS1Padding() {
+        try {
+            RSAAlgorithm.encryptDecryptWithPublicPrivatePKCS1Padding();
+        } catch (Exception e) {
+            Assert.fail("WHOOPS! Threw " + e.toString());
+        }
     }
 
     @Test
-    public void shouldEncryptDecryptWithPublicPrivateOAEPPadding() throws Exception {
-        RSAAlgorithm.encryptDecryptWithPublicPrivateOAEPPadding();
+    public void shouldEncryptDecryptWithPublicPrivateOAEPPadding() {
+        try {
+            RSAAlgorithm.encryptDecryptWithPublicPrivateOAEPPadding();
+        } catch (Exception e) {
+            Assert.fail("WHOOPS! Threw " + e.toString());
+        }
     }
 
     @Test
-    public void shouldEncryptDecryptWrappedSymmetricWithAsymmetricKey() throws Exception {
-        RSAAlgorithm.encryptDecryptWrappedSymmetricWithAsymmetricKey();
+    public void shouldEncryptDecryptWrappedSymmetricWithAsymmetricKey() {
+        try {
+            RSAAlgorithm.encryptDecryptWrappedSymmetricWithAsymmetricKey();
+        } catch (Exception e) {
+            Assert.fail("WHOOPS! Threw " + e.toString());
+        }
     }
 }

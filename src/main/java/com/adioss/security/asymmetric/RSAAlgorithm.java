@@ -15,13 +15,15 @@ import java.security.spec.RSAPrivateKeySpec;
 import java.security.spec.RSAPublicKeySpec;
 import javax.crypto.*;
 import javax.crypto.spec.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.adioss.security.Utils;
 
 /**
  * RSA: Rivest, Shamir, Adleman
  */
-public class RSAAlgorithm {
-
+class RSAAlgorithm {
+    private static final Logger LOG = LoggerFactory.getLogger(RSAAlgorithm.class);
     private static final byte[] INPUT = new byte[]{0x00, (byte) 0xbe, (byte) 0xef};
 
     /**
@@ -37,17 +39,17 @@ public class RSAAlgorithm {
         PublicKey publicKey = kp.getPublic();
         PrivateKey privateKey = kp.getPrivate();
 
-        System.out.println("input : " + Utils.toHex(INPUT));
+        LOG.debug("input : " + Utils.toHex(INPUT));
 
         // encryption step
         cipher.init(Cipher.ENCRYPT_MODE, publicKey);
         byte[] cipherText = cipher.doFinal(INPUT);
-        System.out.println("cipher: " + Utils.toHex(cipherText));
+        LOG.debug("cipher: " + Utils.toHex(cipherText));
 
         // decryption step
         cipher.init(Cipher.DECRYPT_MODE, privateKey);
         byte[] plainText = cipher.doFinal(cipherText);
-        System.out.println("plain : " + Utils.toHex(plainText));
+        LOG.debug("plain : " + Utils.toHex(plainText));
     }
 
     /**
@@ -78,17 +80,17 @@ public class RSAAlgorithm {
         RSAPublicKey publicKey = (RSAPublicKey) keyFactory.generatePublic(publicKeySpec);
         RSAPrivateKey privateKey = (RSAPrivateKey) keyFactory.generatePrivate(privateKeySpec);
 
-        System.out.println("input : " + Utils.toHex(INPUT));
+        LOG.debug("input : " + Utils.toHex(INPUT));
 
         // encryption step
         cipher.init(Cipher.ENCRYPT_MODE, publicKey);
         byte[] cipherText = cipher.doFinal(INPUT);
-        System.out.println("cipher: " + Utils.toHex(cipherText));
+        LOG.debug("cipher: " + Utils.toHex(cipherText));
 
         // decryption step
         cipher.init(Cipher.DECRYPT_MODE, privateKey);
         byte[] plainText = cipher.doFinal(cipherText);
-        System.out.println("plain : " + Utils.toHex(plainText));
+        LOG.debug("plain : " + Utils.toHex(plainText));
     }
 
     /**
@@ -103,7 +105,7 @@ public class RSAAlgorithm {
         KeyPair pair = keyPairGenerator.generateKeyPair();
         Key publicKey = pair.getPublic();
         Key privateKey = pair.getPrivate();
-        System.out.println("input : " + Utils.toHex(INPUT));
+        LOG.debug("input : " + Utils.toHex(INPUT));
 
         // create the symmetric key and iv
         Key symmetricKey = Utils.createKeyForAES(128, random);
@@ -118,8 +120,8 @@ public class RSAAlgorithm {
         Cipher symmetricCipher = Cipher.getInstance("AES/CTR/NoPadding");
         symmetricCipher.init(Cipher.ENCRYPT_MODE, symmetricKey, symmetricIvSpec);
         byte[] cipherText = symmetricCipher.doFinal(INPUT);
-        System.out.println("keyBlock length : " + keyBlock.length);
-        System.out.println("cipherText length : " + cipherText.length);
+        LOG.debug("keyBlock length : " + keyBlock.length);
+        LOG.debug("cipherText length : " + cipherText.length);
 
         // symmetric key/iv unwrapping step
         asymmetricCipher.init(Cipher.DECRYPT_MODE, privateKey);
@@ -128,7 +130,7 @@ public class RSAAlgorithm {
         // decryption step
         symmetricCipher.init(Cipher.DECRYPT_MODE, (Key) keyIv[0], (IvParameterSpec) keyIv[1]);
         byte[] plainText = symmetricCipher.doFinal(cipherText);
-        System.out.println("plain : " + Utils.toHex(plainText));
+        LOG.debug("plain : " + Utils.toHex(plainText));
     }
 
     /**
@@ -148,17 +150,17 @@ public class RSAAlgorithm {
         Key publicKey = pair.getPublic();
         Key privateKey = pair.getPrivate();
 
-        System.out.println("input : " + Utils.toHex(INPUT));
+        LOG.debug("input : " + Utils.toHex(INPUT));
 
         // encryption step
         cipher.init(Cipher.ENCRYPT_MODE, publicKey, random);
         byte[] cipherText = cipher.doFinal(INPUT);
-        System.out.println("cipher: " + Utils.toHex(cipherText));
+        LOG.debug("cipher: " + Utils.toHex(cipherText));
 
         // decryption step
         cipher.init(Cipher.DECRYPT_MODE, privateKey);
         byte[] plainText = cipher.doFinal(cipherText);
-        System.out.println("plain : " + Utils.toHex(plainText));
+        LOG.debug("plain : " + Utils.toHex(plainText));
     }
 
     static void encryptDecryptWithPublicPrivateOAEPPadding() throws Exception {
@@ -172,17 +174,17 @@ public class RSAAlgorithm {
         Key pubKey = pair.getPublic();
         Key privKey = pair.getPrivate();
 
-        System.out.println("input : " + Utils.toHex(INPUT));
+        LOG.debug("input : " + Utils.toHex(INPUT));
 
         // encryption step
         cipher.init(Cipher.ENCRYPT_MODE, pubKey, random);
         byte[] cipherText = cipher.doFinal(INPUT);
-        System.out.println("cipher: " + Utils.toHex(cipherText));
+        LOG.debug("cipher: " + Utils.toHex(cipherText));
 
         // decryption step
         cipher.init(Cipher.DECRYPT_MODE, privKey);
         byte[] plainText = cipher.doFinal(cipherText);
-        System.out.println("plain : " + Utils.toHex(plainText));
+        LOG.debug("plain : " + Utils.toHex(plainText));
     }
 
     private static BigInteger getCoprime(BigInteger m, SecureRandom random) {
@@ -205,14 +207,6 @@ public class RSAAlgorithm {
 
     private static Object[] unpackKeyAndIV(byte[] data) {
         return new Object[]{new SecretKeySpec(data, 16, data.length - 16, "AES"), new IvParameterSpec(data, 0, 16)};
-    }
-
-    public static void main(String... args) throws Exception {
-        encryptDecryptWithPublicPrivateRSAKeysGenerated();
-        //        encryptDecryptWithPublicPrivateRSAKeysWithExponentManuallyGenerated();
-        //        encryptDecryptWithPublicPrivatePKCS1Padding();
-        //        encryptDecryptWithPublicPrivateOAEPPadding();
-        //        encryptDecryptWrappedSymmetricWithAsymmetricKey();
     }
 
     private RSAAlgorithm() {

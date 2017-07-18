@@ -10,7 +10,6 @@ public class ModeForSymmetricEncryptionTest {
             ModeForSymmetricEncryption.encryptWithECB();
         } catch (Exception e) {
             Assert.fail("WHOOPS! Threw " + e.toString());
-            e.printStackTrace();
         }
     }
 
@@ -20,7 +19,6 @@ public class ModeForSymmetricEncryptionTest {
             ModeForSymmetricEncryption.encryptWithCBC();
         } catch (Exception e) {
             Assert.fail("WHOOPS! Threw " + e.toString());
-            e.printStackTrace();
         }
     }
 
@@ -30,7 +28,6 @@ public class ModeForSymmetricEncryptionTest {
             ModeForSymmetricEncryption.encryptWithCBCWithSecureRandomIV();
         } catch (Exception e) {
             Assert.fail("WHOOPS! Threw " + e.toString());
-            e.printStackTrace();
         }
     }
 
@@ -40,7 +37,6 @@ public class ModeForSymmetricEncryptionTest {
             ModeForSymmetricEncryption.encryptWithCTS();
         } catch (Exception e) {
             Assert.fail("WHOOPS! Threw " + e.toString());
-            e.printStackTrace();
         }
     }
 
@@ -50,7 +46,6 @@ public class ModeForSymmetricEncryptionTest {
             ModeForSymmetricEncryption.encryptWithCTR();
         } catch (Exception e) {
             Assert.fail("WHOOPS! Threw " + e.toString());
-            e.printStackTrace();
         }
     }
 

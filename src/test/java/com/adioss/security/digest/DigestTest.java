@@ -10,7 +10,6 @@ public class DigestTest {
             Digest.encryptDecryptWithDigest();
         } catch (Exception e) {
             Assert.fail("WHOOPS! Threw " + e.toString());
-            e.printStackTrace();
         }
     }
 
@@ -20,7 +19,6 @@ public class DigestTest {
             Digest.encryptDecryptWithHMac();
         } catch (Exception e) {
             Assert.fail("WHOOPS! Threw " + e.toString());
-            e.printStackTrace();
         }
     }
 }

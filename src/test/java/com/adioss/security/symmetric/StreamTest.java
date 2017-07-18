@@ -10,7 +10,6 @@ public class StreamTest {
             Stream.streamEncryptDecrypt();
         } catch (Exception e) {
             Assert.fail("WHOOPS! Threw " + e.toString());
-            e.printStackTrace();
         }
     }
 
