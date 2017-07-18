@@ -39,7 +39,7 @@ public class CertificateValidationTest {
         KeyPair keyPair = keyPairGenerator.generateKeyPair();
 
         // When generate a X509 certificate V0
-        X509Certificate x509Certificate = CertificateGenerator.generateX509V1Certificate(keyPair);
+        X509Certificate x509Certificate = generateX509V1Certificate(keyPair);
 
         // Then is validated by public key
         x509Certificate.verify(keyPair.getPublic());
@@ -52,12 +52,12 @@ public class CertificateValidationTest {
 
         // Generate root CA
         KeyPair caRootKeyPair = keyPairGenerator.generateKeyPair();
-        X509Certificate caRootCertificate = CertificateGenerator.generateRootCert(caRootKeyPair, "CN=Root CA Certificate");
+        X509Certificate caRootCertificate = generateRootCert(caRootKeyPair, "CN=Root CA Certificate");
         caRootCertificate.verify(caRootKeyPair.getPublic());
 
         // Generate another root CA
         KeyPair fakeRootKeyPair = keyPairGenerator.generateKeyPair();
-        X509Certificate fakeRootCertificate = CertificateGenerator.generateRootCert(fakeRootKeyPair, "CN=Fake Root CA Certificate");
+        X509Certificate fakeRootCertificate = generateRootCert(fakeRootKeyPair, "CN=Fake Root CA Certificate");
 
         // Generate intermediate CA
         KeyPair intermediateKeyPair = keyPairGenerator.generateKeyPair();
@@ -110,7 +110,7 @@ public class CertificateValidationTest {
         keyPairGenerator.initialize(2048);
         // Generate root CA
         KeyPair caRootKeyPair = keyPairGenerator.generateKeyPair();
-        X509Certificate caRootCertificate = CertificateGenerator.generateRootCert(caRootKeyPair, "CN=Root CA Certificate");
+        X509Certificate caRootCertificate = generateRootCert(caRootKeyPair, "CN=Root CA Certificate");
         // Generate standard certificate to revoke
         KeyPair standardKeyPairRevoked = keyPairGenerator.generateKeyPair();
         X509Certificate endEntityCertificateRevoked = generateEndEntityCert(standardKeyPairRevoked, caRootKeyPair, caRootCertificate,
