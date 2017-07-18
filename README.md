@@ -1,5 +1,6 @@
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Build Status](https://travis-ci.org/adioss/cryptoMemo.svg?branch=master)](https://travis-ci.org/adioss/cryptoMemo)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/c40f87debdc244e79525e851a1d357e2)](https://www.codacy.com/app/adioss/cryptoMemo?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=adioss/cryptoMemo&amp;utm_campaign=Badge_Grade)
 [![Dependency Status](https://www.versioneye.com/user/projects/596c88c2368b080047e350a3/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/596c88c2368b080047e350a3)
 [![Sonarcloud quality gate](https://sonarcloud.io/api/badges/gate?key=com.adioss.security:cryptography)](https://sonarcloud.io/dashboard?id=com.adioss.security:cryptography)
 [![Sonarcloud lines](https://sonarcloud.io/api/badges/measure?key=com.adioss.security:cryptography&metric=lines)](https://sonarcloud.io/dashboard?id=com.adioss.security:cryptography)
