@@ -11,7 +11,6 @@ class Stream {
     private static final Logger LOG = LoggerFactory.getLogger(Stream.class);
 
     static void streamEncryptDecrypt() throws Exception {
-        ByteArrayOutputStream byteArrayOutputStream;
 
         byte[] input = new byte[]{0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f, 0x00, 0x01, 0x02, 0x03, 0x04,
                 0x05, 0x06};
@@ -27,22 +26,26 @@ class Stream {
 
         // encryption pass
         cipher.init(Cipher.ENCRYPT_MODE, key, ivParameterSpec);
-        CipherInputStream cipherInputStream = new CipherInputStream(new ByteArrayInputStream(input), cipher);
-        ByteArrayOutputStream byteArrayOutputStream1 = new ByteArrayOutputStream();
-        int character;
-        while ((character = cipherInputStream.read()) >= 0) {
-            byteArrayOutputStream1.write(character);
+
+        byte[] cipherText;
+        try (CipherInputStream cipherInputStream = new CipherInputStream(new ByteArrayInputStream(input), cipher);
+             ByteArrayOutputStream byteArrayOutputStream1 = new ByteArrayOutputStream()) {
+            int character;
+            while ((character = cipherInputStream.read()) >= 0) {
+                byteArrayOutputStream1.write(character);
+            }
+            cipherText = byteArrayOutputStream1.toByteArray();
+            LOG.debug("cipher: " + Utils.toHex(cipherText));
         }
-        byte[] cipherText = byteArrayOutputStream1.toByteArray();
-        LOG.debug("cipher: " + Utils.toHex(cipherText));
 
         // decryption pass
         cipher.init(Cipher.DECRYPT_MODE, key, ivParameterSpec);
-        byteArrayOutputStream = new ByteArrayOutputStream();
-        try (CipherOutputStream cipherOutputStream = new CipherOutputStream(byteArrayOutputStream, cipher)) {
+
+        try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+             CipherOutputStream cipherOutputStream = new CipherOutputStream(byteArrayOutputStream, cipher)) {
             cipherOutputStream.write(cipherText);
+            LOG.debug("plain: " + Utils.toHex(byteArrayOutputStream.toByteArray()));
         }
-        LOG.debug("plain: " + Utils.toHex(byteArrayOutputStream.toByteArray()));
     }
 
     private Stream() {

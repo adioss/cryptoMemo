@@ -59,7 +59,7 @@ public class Utils {
         ivBytes[0] = (byte) (messageNumber >> 24);
         ivBytes[1] = (byte) (messageNumber >> 16);
         ivBytes[2] = (byte) (messageNumber >> 8);
-        ivBytes[3] = (byte) (messageNumber >> 0);
+        ivBytes[3] = (byte) (messageNumber);
         // set the counter bytes to 1
         for (int i = 0; i != 7; i++) {
             ivBytes[8 + i] = 0;
@@ -100,9 +100,8 @@ public class Utils {
     }
 
     private static class FixedRand extends SecureRandom {
-
-        MessageDigest sha;
-        byte[] state;
+        private final MessageDigest sha;
+        private byte[] state;
 
         FixedRand() {
             try {
