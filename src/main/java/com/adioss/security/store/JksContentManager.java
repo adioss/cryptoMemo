@@ -8,6 +8,8 @@ import java.security.cert.Certificate;
 import java.security.cert.CertificateFactory;
 import java.util.*;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 /**
  * Fully/totally inspired/copied/refactored http://metastatic.org/source/JKS.java (copyright Casey Marshall (rsdio@metastatic.org))
  */
@@ -83,7 +85,7 @@ final class JksContentManager {
     void save(OutputStream outputStream, char[] password) throws Exception {
         MessageDigest messageDigest = MessageDigest.getInstance("SHA1");
         messageDigest.update(charsToBytes(password));
-        messageDigest.update(MIGHTY_APHRODITE.getBytes("UTF-8"));
+        messageDigest.update(MIGHTY_APHRODITE.getBytes(UTF_8));
         try (DataOutputStream dataOutputStream = new DataOutputStream(new DigestOutputStream(outputStream, messageDigest))) {
             dataOutputStream.writeInt(MAGIC);
             dataOutputStream.writeInt(2);

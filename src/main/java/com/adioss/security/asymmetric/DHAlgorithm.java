@@ -56,7 +56,7 @@ class DHAlgorithm {
         keyAgreement2.doPhase(keyPair1.getPublic(), true);
 
         // generate the key bytes
-        MessageDigest hash = MessageDigest.getInstance("SHA1");
+        MessageDigest hash = MessageDigest.getInstance("SHA-384");
         byte[] digestSecretAgreement1 = hash.digest(keyAgreement1.generateSecret());
         byte[] digestSecretAgreement2 = hash.digest(keyAgreement2.generateSecret());
 
@@ -96,7 +96,7 @@ class DHAlgorithm {
         keyAgreement2.doPhase(keyPair1.getPublic(), true);
 
         // generate the key bytes
-        MessageDigest hash = MessageDigest.getInstance("SHA1");
+        MessageDigest hash = MessageDigest.getInstance("SHA-384");
         byte[] digestSecretAgreement1 = hash.digest(keyAgreement1.generateSecret());
         byte[] digestSecretAgreement2 = hash.digest(keyAgreement2.generateSecret());
 

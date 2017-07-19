@@ -29,7 +29,7 @@ class Digest {
         IvParameterSpec ivParameterSpec = Utils.createIvForAES(1, SECURE_RANDOM);
         Key key = Utils.createKeyForAES(SECURE_RANDOM);
         String input = "Validate with digested data.....";
-        MessageDigest messageDigest = MessageDigest.getInstance("SHA-1");
+        MessageDigest messageDigest = MessageDigest.getInstance("SHA-384");
         LOG.debug("input : " + input);
 
         // encryption step

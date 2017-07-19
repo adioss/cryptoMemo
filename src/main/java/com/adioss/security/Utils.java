@@ -6,10 +6,15 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.SecureRandom;
+import java.security.cert.Certificate;
+import java.security.cert.CertificateEncodingException;
 import javax.crypto.*;
 import javax.crypto.spec.*;
 import org.bouncycastle.openssl.PEMWriter;
 import org.bouncycastle.pkcs.PKCS10CertificationRequest;
+import com.google.common.base.Charsets;
+import sun.misc.BASE64Encoder;
+import sun.security.provider.X509Factory;
 
 public class Utils {
     private final static String DIGITS = "0123456789abcdef";
@@ -105,10 +110,10 @@ public class Utils {
 
         FixedRand() {
             try {
-                this.sha = MessageDigest.getInstance("SHA-1");
+                this.sha = MessageDigest.getInstance("SHA-384");
                 this.state = sha.digest();
             } catch (Exception e) {
-                throw new RuntimeException("can't find SHA-1!");
+                throw new RuntimeException("can't find SHA-384!");
             }
         }
 
@@ -135,6 +140,18 @@ public class Utils {
         try (PEMWriter pemWrt = new PEMWriter(new OutputStreamWriter(System.out))) {
             pemWrt.writeObject(request);
         }
+    }
+
+    /**
+     * Convert a ASN.1 DER certificate to a PEM format (
+     */
+    static String convertToPemFormat(Certificate certificate) throws CertificateEncodingException, IOException {
+        String rfc;
+        try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
+            new BASE64Encoder().encodeBuffer(certificate.getEncoded(), byteArrayOutputStream);
+            rfc = new String(byteArrayOutputStream.toByteArray(), Charsets.UTF_8);
+        }
+        return X509Factory.BEGIN_CERT + System.lineSeparator() + rfc + System.lineSeparator() + X509Factory.END_CERT;
     }
 
     private Utils() {

@@ -12,6 +12,7 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import sun.misc.BASE64Encoder;
 
 import static com.adioss.security.certificate.CertificateGenerator.*;
 import static com.adioss.security.certificate.CertificatePathValidator.*;
@@ -19,7 +20,7 @@ import static java.util.Arrays.*;
 import static org.junit.Assert.*;
 
 public class CertificateValidationTest {
-    private static final String DEFAULT_PASSWORD = "changeit";
+    public static final String DEFAULT_PASSWORD = "changeit";
 
     @BeforeClass
     public static void setUp() throws Exception {
@@ -115,6 +116,15 @@ public class CertificateValidationTest {
         KeyPair standardKeyPairRevoked = keyPairGenerator.generateKeyPair();
         X509Certificate endEntityCertificateRevoked = generateEndEntityCert(standardKeyPairRevoked, caRootKeyPair, caRootCertificate,
                                                                             "CN=End Certificate Revoked");
+        endEntityCertificateRevoked.getEncoded();
+        //BASE64Encoder encoder = new BASE64Encoder();
+        //System.out.println(X509Factory.BEGIN_CERT);
+        //encoder.encodeBuffer(cert.getEncoded(), System.out);
+        //out.println(X509Factory.END_CERT);
+        new BASE64Encoder().encodeBuffer(endEntityCertificateRevoked.getEncoded(), System.out);
+
+
+
         KeyPair standardKeyPairNotRevoked = keyPairGenerator.generateKeyPair();
         X509Certificate endEntityCertificateNotRevoked = generateEndEntityCert(standardKeyPairNotRevoked, caRootKeyPair, caRootCertificate,
                                                                                "CN=End Certificate Not Revoked");
