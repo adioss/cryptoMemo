@@ -8,10 +8,13 @@ import java.security.NoSuchProviderException;
 import java.security.SecureRandom;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateEncodingException;
+import java.security.cert.CertificateFactory;
+import java.security.cert.X509Certificate;
 import javax.crypto.*;
 import javax.crypto.spec.*;
 import org.bouncycastle.openssl.PEMWriter;
 import org.bouncycastle.pkcs.PKCS10CertificationRequest;
+import org.bouncycastle.util.io.Streams;
 import com.google.common.base.Charsets;
 import sun.misc.BASE64Encoder;
 import sun.security.provider.X509Factory;
@@ -102,6 +105,12 @@ public class Utils {
 
     public static SecureRandom createFixedRandom() {
         return new FixedRand();
+    }
+
+    public static X509Certificate openDerFile(InputStream inputStream) throws Exception {
+        byte[] certData = Streams.readAll(inputStream);
+        CertificateFactory jceFac = CertificateFactory.getInstance("X.509");
+        return (X509Certificate) jceFac.generateCertificate(new ByteArrayInputStream(certData));
     }
 
     private static class FixedRand extends SecureRandom {

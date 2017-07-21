@@ -12,7 +12,6 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import sun.misc.BASE64Encoder;
 
 import static com.adioss.security.certificate.CertificateGenerator.*;
 import static com.adioss.security.certificate.CertificatePathValidator.*;
@@ -116,15 +115,7 @@ public class CertificateValidationTest {
         KeyPair standardKeyPairRevoked = keyPairGenerator.generateKeyPair();
         X509Certificate endEntityCertificateRevoked = generateEndEntityCert(standardKeyPairRevoked, caRootKeyPair, caRootCertificate,
                                                                             "CN=End Certificate Revoked");
-        endEntityCertificateRevoked.getEncoded();
-        //BASE64Encoder encoder = new BASE64Encoder();
-        //System.out.println(X509Factory.BEGIN_CERT);
-        //encoder.encodeBuffer(cert.getEncoded(), System.out);
-        //out.println(X509Factory.END_CERT);
-        new BASE64Encoder().encodeBuffer(endEntityCertificateRevoked.getEncoded(), System.out);
-
-
-
+        // Generate standard certificate not revoked
         KeyPair standardKeyPairNotRevoked = keyPairGenerator.generateKeyPair();
         X509Certificate endEntityCertificateNotRevoked = generateEndEntityCert(standardKeyPairNotRevoked, caRootKeyPair, caRootCertificate,
                                                                                "CN=End Certificate Not Revoked");
