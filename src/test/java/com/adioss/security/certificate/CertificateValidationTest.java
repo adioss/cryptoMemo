@@ -4,32 +4,19 @@ import java.io.*;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.KeyStore;
-import java.security.Security;
 import java.security.cert.X509CRL;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
 import org.junit.Test;
+import com.adioss.security.AbstractBouncyCastleTest;
 
 import static com.adioss.security.certificate.CertificateGenerator.*;
 import static com.adioss.security.certificate.CertificatePathValidator.*;
 import static java.util.Arrays.*;
 import static org.junit.Assert.*;
 
-public class CertificateValidationTest {
+public class CertificateValidationTest extends AbstractBouncyCastleTest {
     public static final String DEFAULT_PASSWORD = "changeit";
-
-    @BeforeClass
-    public static void setUp() throws Exception {
-        Security.addProvider(new BouncyCastleProvider());
-    }
-
-    @AfterClass
-    public static void tearDown() throws Exception {
-        Security.removeProvider("BC");
-    }
 
     @Test
     public void shouldGenerateX509V1Certificate() throws Exception {

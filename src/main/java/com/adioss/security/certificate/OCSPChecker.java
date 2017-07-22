@@ -3,6 +3,7 @@ package com.adioss.security.certificate;
 import java.security.cert.X509Certificate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.google.common.annotations.VisibleForTesting;
 import sun.security.provider.certpath.OCSP;
 import sun.security.util.ObjectIdentifier;
 import sun.security.x509.AuthorityInfoAccessExtension;
@@ -24,6 +25,7 @@ class OCSPChecker {
      * @param checker {@link X509Certificate} that contains the {@link AuthorityInfoAccessExtension} with OCSP server access location
      * @return {@code true} if certificate validated by OCSP server
      */
+    @VisibleForTesting
     static boolean isCertificateStatusGood(X509Certificate toCheck, X509Certificate checker) throws Exception {
         AuthorityInfoAccessExtension extension = (AuthorityInfoAccessExtension) ((X509CertImpl) checker)
                 .getExtension(new ObjectIdentifier(CERTIFICATE_AUTHORITY_INFORMATION_ACCESS_OID));

@@ -15,6 +15,7 @@ import javax.crypto.spec.*;
 import org.bouncycastle.openssl.PEMWriter;
 import org.bouncycastle.pkcs.PKCS10CertificationRequest;
 import org.bouncycastle.util.io.Streams;
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Charsets;
 import sun.misc.BASE64Encoder;
 import sun.security.provider.X509Factory;
@@ -154,6 +155,7 @@ public class Utils {
     /**
      * Convert a ASN.1 DER certificate to a PEM format (
      */
+    @VisibleForTesting
     static String convertToPemFormat(Certificate certificate) throws CertificateEncodingException, IOException {
         String rfc;
         try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
