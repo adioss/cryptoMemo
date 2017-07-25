@@ -140,7 +140,10 @@ class RSAAlgorithm {
     /**
      * Pb is that input is converted to Integer so "00" are escaped on conversion so we use padding to keep them
      * Example here with PKCS1 Padding
+     *
+     * @deprecated use {@link #encryptDecryptWithPublicPrivateOAEPPadding()} instead with OAEP
      */
+    @Deprecated
     @VisibleForTesting
     static void encryptDecryptWithPublicPrivatePKCS1Padding() throws Exception {
         // TODO try with bigger input (text or...)
@@ -168,14 +171,17 @@ class RSAAlgorithm {
         LOG.debug("plain : " + Utils.toHex(plainText));
     }
 
+    /**
+     * Example here with OAEP Padding
+     */
     @VisibleForTesting
     static void encryptDecryptWithPublicPrivateOAEPPadding() throws Exception {
-        Cipher cipher = Cipher.getInstance("RSA/ECB/OAEPWithSHA1AndMGF1Padding");
+        Cipher cipher = Cipher.getInstance("RSA/ECB/OAEPWithSHA-256AndMGF1Padding");
         SecureRandom random = Utils.createFixedRandom();
 
         // create the keys
         KeyPairGenerator generator = KeyPairGenerator.getInstance("RSA");
-        generator.initialize(512, random);
+        generator.initialize(1024, random);
         KeyPair pair = generator.generateKeyPair();
         Key pubKey = pair.getPublic();
         Key privKey = pair.getPrivate();
