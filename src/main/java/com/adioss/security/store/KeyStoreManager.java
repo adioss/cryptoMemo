@@ -31,6 +31,14 @@ class KeyStoreManager {
     }
 
     @VisibleForTesting
+    static KeyStore createPKCS12BCKeyStore() throws Exception {
+        KeyStore store = KeyStore.getInstance("PKCS12", "BC");
+        // initialize
+        store.load(null, null);
+        return store;
+    }
+
+    @VisibleForTesting
     static KeyStore createJCEKSKeyStore() throws Exception {
         KeyStore store = KeyStore.getInstance("JCEKS");
         // initialize
@@ -64,6 +72,17 @@ class KeyStoreManager {
                        new PasswordProtection(endEntityKeyPassword));
         // equivalent to:
         // store.setKeyEntry(endEntityEntry.getAlias(), endEntityEntry.getPrivateKey(), endEntityKeyPassword, (Certificate[]) chains.toArray());
+    }
+
+    /**
+     * Add a {@link PrivateKeyEntry} inside a store WITHOUT password. This feature only work on PKCS12 AND on BC implementation, not on JCE.
+     *
+     * @param endEntityEntry the key entry to append
+     * @param chains the certificate chain for the corresponding public key
+     */
+    @VisibleForTesting
+    static void addPrivateKeyEntry(KeyStore store, X500PrivateCredential endEntityEntry, List<Certificate> chains) throws Exception {
+        store.setKeyEntry(endEntityEntry.getAlias(), endEntityEntry.getPrivateKey(), null, (Certificate[]) chains.toArray());
     }
 
     /**

@@ -92,8 +92,6 @@ public class KeyStoreManagerTest {
     @Test
     public void shouldCreatePKCS12KeyStoreWithOneKeyEntry() throws Exception {
         // Given
-        BouncyCastleProvider provider = new BouncyCastleProvider();
-        Security.addProvider(provider);
         KeyStore store = KeyStoreManager.createPKCS12KeyStore();
 
         // When
@@ -112,6 +110,30 @@ public class KeyStoreManagerTest {
         Assert.assertNotNull(entry);
         // created with a TrustedCertificateEntry
         Assert.assertTrue(store.isCertificateEntry(ROOT_CERTIFICATE_ALIAS));
+        // created with a PrivateKeyEntry
+        Assert.assertFalse(store.isCertificateEntry(END_ENTITY_ALIAS));
+    }
+
+    @Test
+    public void shouldCreatePKCS12BCKeyStoreWithOneKeyEntryWithoutPassword() throws Exception {
+        // Given
+        BouncyCastleProvider provider = new BouncyCastleProvider();
+        Security.addProvider(provider);
+        KeyStore store = KeyStoreManager.createPKCS12BCKeyStore();
+
+        // When
+        // put a private key WITHOUT a password: only works on PKCS12 + BC (not JCE) implementation
+        KeyStoreManager.addPrivateKeyEntry(store, m_endEntityPrivateCredential, asList(m_endEntityCertificate, m_intermediateCertificate, m_caRootCertificate));
+
+        // Then
+        Assert.assertNotNull(store);
+        Assert.assertNotNull(store.getKey(END_ENTITY_ALIAS, DEFAULT_PASSWORD));
+        // And
+        KeyStore.Builder builder = KeyStore.Builder.newInstance(store, new KeyStore.PasswordProtection(DEFAULT_PASSWORD));
+        store = builder.getKeyStore();
+        KeyStore.ProtectionParameter param = builder.getProtectionParameter(END_ENTITY_ALIAS);
+        KeyStore.Entry entry = store.getEntry(END_ENTITY_ALIAS, param);
+        Assert.assertNotNull(entry);
         // created with a PrivateKeyEntry
         Assert.assertFalse(store.isCertificateEntry(END_ENTITY_ALIAS));
         Security.removeProvider(provider.getName());
