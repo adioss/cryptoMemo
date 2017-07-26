@@ -2,68 +2,80 @@ package com.adioss.security.store;
 
 import java.io.*;
 import java.nio.file.Paths;
-import java.security.KeyPairGenerator;
 import java.security.KeyStore;
 import java.security.PrivateKey;
 import java.security.cert.Certificate;
 import java.util.*;
 import javax.crypto.*;
 import javax.security.auth.x500.*;
-import com.adioss.security.Utils;
 import com.google.common.annotations.VisibleForTesting;
 
 import static java.security.KeyStore.*;
 
 class KeyStoreManager {
 
-    /**
-     * Create a JKS store with one {@link PrivateKey} inside
-     *
-     * @param endEntityEntry the key entry to append
-     * @param endEntityKeyPassword the password for entry to append
-     * @param caRootCertificate the {@link TrustedCertificateEntry} that signed the entry
-     * @param chains the certificate chain for the corresponding public key
-     * @return a {@link KeyStore}
-     */
     @VisibleForTesting
-    static KeyStore createKeyStoreWithOnePrivateKeyEntry(X500PrivateCredential endEntityEntry, char[] endEntityKeyPassword,
-                                                         X500PrivateCredential caRootCertificate, List<Certificate> chains) throws Exception {
-        KeyStore store = getInstance(getDefaultType());
+    static KeyStore createDefaultTypeKeyStore() throws Exception {
+        KeyStore store = KeyStore.getInstance(getDefaultType());
         // initialize
         store.load(null, null);
-        KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
-        keyPairGenerator.initialize(2048);
-        // set the entries
-        store.setEntry(caRootCertificate.getAlias(), new KeyStore.TrustedCertificateEntry(caRootCertificate.getCertificate()), null);
-        store.setEntry(endEntityEntry.getAlias(), new KeyStore.PrivateKeyEntry(endEntityEntry.getPrivateKey(), (Certificate[]) chains.toArray()),
-                       new KeyStore.PasswordProtection(endEntityKeyPassword));
+        return store;
+    }
 
-        // equivalent to:
-        //
-        // store.setCertificateEntry(caRootCertificate.getAlias(), caRootCertificate.getCertificate());
-        // store.setKeyEntry(endEntityEntry.getAlias(), endEntityEntry.getPrivateKey(), endEntityKeyPassword, (Certificate[]) chains.toArray());
+    @VisibleForTesting
+    static KeyStore createPKCS12KeyStore() throws Exception {
+        KeyStore store = KeyStore.getInstance("PKCS12");
+        // initialize
+        store.load(null, null);
+        return store;
+    }
 
+    @VisibleForTesting
+    static KeyStore createJCEKSKeyStore() throws Exception {
+        KeyStore store = KeyStore.getInstance("JCEKS");
+        // initialize
+        store.load(null, null);
         return store;
     }
 
     /**
-     * Create a JCEKS store with one {@link SecretKeyEntry} inside (check {@link Utils#createKeyForAES} to create one)
+     * Add a {@link PrivateKey} inside a store
      *
-     * @param secretKeyAlias the alias
-     * @param secretKey the {@link SecretKey}
-     * @param secretKeyPassword the password for the key
-     * @return a {@link KeyStore}
+     * @param caRootCertificate the {@link TrustedCertificateEntry} that signed the entry
      */
     @VisibleForTesting
-    static KeyStore createKeyStoreWithOneSecretKeyEntry(String secretKeyAlias, SecretKey secretKey, char[] secretKeyPassword) throws Exception {
-        KeyStore store = getInstance("JCEKS");
-        // initialize
-        store.load(null, null);
+    static void addCertificateEntry(KeyStore store, X500PrivateCredential caRootCertificate) throws Exception {
+        store.setEntry(caRootCertificate.getAlias(), new TrustedCertificateEntry(caRootCertificate.getCertificate()), null);
+        // equivalent to:
+        // store.setCertificateEntry(caRootCertificate.getAlias(), caRootCertificate.getCertificate());
+    }
 
-        // set the entries
+    /**
+     * Add a {@link PrivateKeyEntry} inside a store
+     *
+     * @param endEntityEntry the key entry to append
+     * @param endEntityKeyPassword the password for entry to append
+     * @param chains the certificate chain for the corresponding public key
+     */
+    @VisibleForTesting
+    static void addPrivateKeyEntry(KeyStore store, X500PrivateCredential endEntityEntry, char[] endEntityKeyPassword, List<Certificate> chains)
+            throws Exception {
+        store.setEntry(endEntityEntry.getAlias(), new PrivateKeyEntry(endEntityEntry.getPrivateKey(), (Certificate[]) chains.toArray()),
+                       new PasswordProtection(endEntityKeyPassword));
+        // equivalent to:
+        // store.setKeyEntry(endEntityEntry.getAlias(), endEntityEntry.getPrivateKey(), endEntityKeyPassword, (Certificate[]) chains.toArray());
+    }
+
+    /**
+     * Add a {@link PrivateKeyEntry} inside a store
+     *
+     * @param secretKeyAlias the secret key alias
+     * @param secretKey the {@link SecretKey}
+     * @param secretKeyPassword the secret key password
+     */
+    @VisibleForTesting
+    static void addSecretKeyEntry(KeyStore store, String secretKeyAlias, SecretKey secretKey, char[] secretKeyPassword) throws Exception {
         store.setEntry(secretKeyAlias, new KeyStore.SecretKeyEntry(secretKey), new KeyStore.PasswordProtection(secretKeyPassword));
-
-        return store;
     }
 
     /**
