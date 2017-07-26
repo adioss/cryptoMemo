@@ -68,7 +68,7 @@ class KeyStoreManager {
     @VisibleForTesting
     static void addPrivateKeyEntry(KeyStore store, X500PrivateCredential endEntityEntry, char[] endEntityKeyPassword, List<Certificate> chains)
             throws Exception {
-        store.setEntry(endEntityEntry.getAlias(), new PrivateKeyEntry(endEntityEntry.getPrivateKey(), (Certificate[]) chains.toArray()),
+        store.setEntry(endEntityEntry.getAlias(), new PrivateKeyEntry(endEntityEntry.getPrivateKey(), chains.toArray(new Certificate[chains.size()])),
                        new PasswordProtection(endEntityKeyPassword));
         // equivalent to:
         // store.setKeyEntry(endEntityEntry.getAlias(), endEntityEntry.getPrivateKey(), endEntityKeyPassword, (Certificate[]) chains.toArray());
@@ -82,7 +82,7 @@ class KeyStoreManager {
      */
     @VisibleForTesting
     static void addPrivateKeyEntry(KeyStore store, X500PrivateCredential endEntityEntry, List<Certificate> chains) throws Exception {
-        store.setKeyEntry(endEntityEntry.getAlias(), endEntityEntry.getPrivateKey(), null, (Certificate[]) chains.toArray());
+        store.setKeyEntry(endEntityEntry.getAlias(), endEntityEntry.getPrivateKey(), null, chains.toArray(new Certificate[chains.size()]));
     }
 
     /**
