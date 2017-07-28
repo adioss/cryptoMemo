@@ -39,6 +39,11 @@ keytool -keystore signedBySubIntermediate.jks -storepass changeit -alias caroot 
 echo Import signed cert request end keypair
 keytool -keystore signedBySubIntermediate.jks -storepass changeit -alias MY-ALIAS -importcert -file signedBySubIntermediate.cer -noprompt
 
+echo Generate truststore
+keytool -keystore signedBySubIntermediate.truststore.jks -storepass changeit -alias subIntermediateCA -importcert -file subIntermediateCA.cer -noprompt
+keytool -keystore signedBySubIntermediate.truststore.jks -storepass changeit -alias intermediateCA -importcert -file intermediateCA.cer -noprompt
+keytool -keystore signedBySubIntermediate.truststore.jks -storepass changeit -alias caroot -importcert -file caroot.cer -noprompt
+
 echo Clean
 rm *-req
 pause

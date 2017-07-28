@@ -30,11 +30,11 @@ public class KeyStoreManagerTest {
     private static final String ROOT_CERTIFICATE_ALIAS = "root";
     private static final String END_ENTITY_ALIAS = "end";
 
-    private X509Certificate m_caRootCertificate;
-    private X500PrivateCredential m_rootPrivateCredential;
-    private X509Certificate m_intermediateCertificate;
-    private X500PrivateCredential m_endEntityPrivateCredential;
-    private X509Certificate m_endEntityCertificate;
+    private X509Certificate caRootCertificate;
+    private X500PrivateCredential rootPrivateCredential;
+    private X509Certificate intermediateCertificate;
+    private X500PrivateCredential endEntityPrivateCredential;
+    private X509Certificate endEntityCertificate;
 
     @Before
     public void setUp() throws Exception {
@@ -42,15 +42,15 @@ public class KeyStoreManagerTest {
         keyPairGenerator.initialize(2048);
         // Generate root CA
         KeyPair caRootKeyPair = keyPairGenerator.generateKeyPair();
-        m_caRootCertificate = generateRootCert(caRootKeyPair, "CN=Root CA Certificate");
-        m_rootPrivateCredential = new X500PrivateCredential(m_caRootCertificate, caRootKeyPair.getPrivate(), ROOT_CERTIFICATE_ALIAS);
+        caRootCertificate = generateRootCert(caRootKeyPair, "CN=Root CA Certificate");
+        rootPrivateCredential = new X500PrivateCredential(caRootCertificate, caRootKeyPair.getPrivate(), ROOT_CERTIFICATE_ALIAS);
         // Generate standard certificate to revoke
         KeyPair intermediateKeyPair = keyPairGenerator.generateKeyPair();
-        m_intermediateCertificate = generateIntermediateCA(intermediateKeyPair, caRootKeyPair, m_caRootCertificate, "CN=Test Intermediate Certificate");
+        intermediateCertificate = generateIntermediateCA(intermediateKeyPair, caRootKeyPair, caRootCertificate, "CN=Test Intermediate Certificate");
         // Generate standard certificate not revoked
         KeyPair endEntityKeyPair = keyPairGenerator.generateKeyPair();
-        m_endEntityCertificate = generateEndEntityCert(endEntityKeyPair, intermediateKeyPair, m_intermediateCertificate, "CN=End Certificate Not Revoked");
-        m_endEntityPrivateCredential = new X500PrivateCredential(m_endEntityCertificate, endEntityKeyPair.getPrivate(), END_ENTITY_ALIAS);
+        endEntityCertificate = generateEndEntityCert(endEntityKeyPair, intermediateKeyPair, intermediateCertificate, "CN=End Certificate Not Revoked");
+        endEntityPrivateCredential = new X500PrivateCredential(endEntityCertificate, endEntityKeyPair.getPrivate(), END_ENTITY_ALIAS);
     }
 
     @After
@@ -70,9 +70,9 @@ public class KeyStoreManagerTest {
         KeyStore store = KeyStoreManager.createDefaultTypeKeyStore();
 
         // When
-        KeyStoreManager.addCertificateEntry(store, m_rootPrivateCredential);
-        KeyStoreManager.addPrivateKeyEntry(store, m_endEntityPrivateCredential, DEFAULT_PASSWORD,
-                                           asList(m_endEntityCertificate, m_intermediateCertificate, m_caRootCertificate));
+        KeyStoreManager.addCertificateEntry(store, rootPrivateCredential);
+        KeyStoreManager.addPrivateKeyEntry(store, endEntityPrivateCredential, DEFAULT_PASSWORD,
+                                           asList(endEntityCertificate, intermediateCertificate, caRootCertificate));
 
         // Then
         Assert.assertNotNull(store);
@@ -95,9 +95,9 @@ public class KeyStoreManagerTest {
         KeyStore store = KeyStoreManager.createPKCS12KeyStore();
 
         // When
-        KeyStoreManager.addCertificateEntry(store, m_rootPrivateCredential);
-        KeyStoreManager.addPrivateKeyEntry(store, m_endEntityPrivateCredential, DEFAULT_PASSWORD,
-                                           asList(m_endEntityCertificate, m_intermediateCertificate, m_caRootCertificate));
+        KeyStoreManager.addCertificateEntry(store, rootPrivateCredential);
+        KeyStoreManager.addPrivateKeyEntry(store, endEntityPrivateCredential, DEFAULT_PASSWORD,
+                                           asList(endEntityCertificate, intermediateCertificate, caRootCertificate));
 
         // Then
         Assert.assertNotNull(store);
@@ -123,7 +123,7 @@ public class KeyStoreManagerTest {
 
         // When
         // put a private key WITHOUT a password: only works on PKCS12 + BC (not JCE) implementation
-        KeyStoreManager.addPrivateKeyEntry(store, m_endEntityPrivateCredential, asList(m_endEntityCertificate, m_intermediateCertificate, m_caRootCertificate));
+        KeyStoreManager.addPrivateKeyEntry(store, endEntityPrivateCredential, asList(endEntityCertificate, intermediateCertificate, caRootCertificate));
 
         // Then
         Assert.assertNotNull(store);
