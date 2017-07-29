@@ -1,41 +1,35 @@
 package com.adioss.security.tls;
 
 import java.io.*;
-import java.nio.file.Paths;
 import java.util.concurrent.*;
 import javax.net.ssl.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.adioss.security.Utils;
 
-public class BasicTlsServer {
+class BasicTlsServer {
     private static final Logger LOG = LoggerFactory.getLogger(BasicTlsServer.class);
     static final int SERVER_PORT = 12345;
 
     private final ExecutorService executorService = Executors.newFixedThreadPool(1);
-    private final String keyStore;
-    private final String keyStorePassword;
+
     private SSLSocket socket;
     private SSLServerSocket sslServerSocket;
 
-    BasicTlsServer() {
-        this(null, null);
-    }
-
-    BasicTlsServer(String keyStore, String keyStorePassword) {
-        this.keyStore = keyStore;
-        this.keyStorePassword = keyStorePassword;
-    }
-
-    BasicTlsServer init() throws IOException {
-        // Init system properties
-        System.setProperty("javax.net.ssl.keyStore", keyStore);
-        System.setProperty("javax.net.ssl.keyStorePassword", keyStorePassword);
-        // Create socket
-        SSLServerSocketFactory sslServerSocketFactory = (SSLServerSocketFactory) SSLServerSocketFactory.getDefault();
-        LOG.info("Create server factory");
-        sslServerSocket = (SSLServerSocket) sslServerSocketFactory.createServerSocket(SERVER_PORT);
-        return this;
+    BasicTlsServer(String keyStore, char[] keyStorePassword) {
+        try {
+            // To have a default one, can be provided as command line or
+            // System.setProperty("javax.net.ssl.keyStore", keyStore);
+            // System.setProperty("javax.net.ssl.keyStorePassword", keyStorePassword);
+            // be here we manually create an SSLContext
+            SSLContext sslContext = SslContextUtils.createSSLContext(keyStore, keyStorePassword, null);
+            SSLServerSocketFactory sslServerSocketFactory = sslContext.getServerSocketFactory();
+            sslServerSocket = (SSLServerSocket) sslServerSocketFactory.createServerSocket(SERVER_PORT);
+            LOG.info("Server factory created");
+        } catch (Exception e) {
+            LOG.error("Impossible to create server factory.", e);
+            throw new RuntimeException(e);
+        }
     }
 
     BasicTlsServer start() throws IOException {
@@ -68,10 +62,5 @@ public class BasicTlsServer {
     BasicTlsServer stop() throws IOException {
         socket.close();
         return this;
-    }
-
-    public static void main(String... args) throws Exception {
-        String keyStore = Paths.get(BasicTlsServer.class.getResource("/generated/signedBySubIntermediate.jks").toURI()).toString();
-        new BasicTlsServer(keyStore, "changeit").init().start();
     }
 }

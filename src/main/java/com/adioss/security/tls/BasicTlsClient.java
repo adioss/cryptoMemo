@@ -9,47 +9,37 @@ import com.adioss.security.Utils;
 
 import static com.adioss.security.tls.BasicTlsServer.SERVER_PORT;
 
-public class BasicTlsClient {
+class BasicTlsClient {
     private static final Logger LOG = LoggerFactory.getLogger(BasicTlsClient.class);
 
-    private final String trustStore;
-    private final String trustStorePassword;
-    private String data = "";
+    private StringBuilder data;
     private SSLSocket socket;
 
-    BasicTlsClient() {
-        this(null, null);
-    }
-
-    BasicTlsClient(String trustStore, String trustStorePassword) {
-        this.trustStore = trustStore;
-        this.trustStorePassword = trustStorePassword;
-    }
-
-    BasicTlsClient init() throws IOException {
-        // Init system properties
-        System.setProperty("javax.net.ssl.trustStore", trustStore);
-        System.setProperty("javax.net.ssl.trustStorePassword", trustStorePassword);
-        // Create socket
-        SSLSocketFactory sslSocketFactory = (SSLSocketFactory) SSLSocketFactory.getDefault();
-        LOG.info("Create client socket");
-        socket = (SSLSocket) sslSocketFactory.createSocket(InetAddress.getLocalHost(), SERVER_PORT);
-        return this;
+    BasicTlsClient(String trustStore) {
+        try {
+            SSLContext sslContext = SslContextUtils.createSSLContext(null, null, trustStore);
+            socket = (SSLSocket) sslContext.getSocketFactory().createSocket(InetAddress.getLocalHost(), SERVER_PORT);
+            LOG.info("Client socket created");
+        } catch (Exception e) {
+            LOG.error("Impossible to create client socket.", e);
+            throw new RuntimeException(e);
+        }
     }
 
     BasicTlsClient start() throws IOException {
         LOG.info("Session started.");
+        data = new StringBuilder();
         try (OutputStream outputStream = socket.getOutputStream(); InputStream inputStream = socket.getInputStream()) {
             // right some data
-            outputStream.write(Utils.toByteArray("until"));
+            outputStream.write(Utils.toByteArray("end char: "));
             // stop char
             outputStream.write('!');
             // read data from server
             int ch;
             while ((ch = inputStream.read()) != '!') {
-                data += (char) ch;
+                data.append((char) ch);
             }
-            data += (char) ch;
+            data.append((char) ch);
         }
         LOG.info("Session closed.");
         return this;
@@ -60,7 +50,7 @@ public class BasicTlsClient {
         return this;
     }
 
-    public String getData() {
-        return data;
+    String getData() {
+        return data.toString();
     }
 }

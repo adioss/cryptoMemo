@@ -26,7 +26,11 @@ public class UtilsTest {
             X509Certificate certificate = (X509Certificate) keyStore.getCertificate("intermediateCA");
             String expected = CharStreams.toString(new InputStreamReader(cerAsStream, Charsets.UTF_8));
             String actual = Utils.convertToPemFormat(certificate);
-            assertEquals(expected.replaceAll(System.lineSeparator(), ""), actual.replaceAll(System.lineSeparator(), ""));
+            assertEquals(removeSpaces(expected), removeSpaces(actual));
         }
+    }
+
+    private String removeSpaces(String content) {
+        return content.replaceAll("\n", "").replaceAll("\r", "").replaceAll("\n\r", "");
     }
 }

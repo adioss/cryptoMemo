@@ -1,4 +1,4 @@
-@echo off
+#!/bin/sh
 rm *.jks
 rm *-req
 rm *.cer
@@ -44,4 +44,3 @@ keytool -keystore truststore.jks -storepass changeit -alias intermediateCA -impo
 
 echo Clean
 rm *-req
-pause
