@@ -14,8 +14,8 @@
         <java.version>1.8</java.version>
         <slf4j.version>1.7.25</slf4j.version>
         <log4j.version>2.8.2</log4j.version>
-        <guava.version>22.0</guava.version>
-        <bouncycastle.version>1.57</bouncycastle.version>
+        <guava.version>23.0</guava.version>
+        <bouncycastle.version>1.58</bouncycastle.version>
         <junit.version>4.12</junit.version>
     </properties>
 
