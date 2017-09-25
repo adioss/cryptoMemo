@@ -1,5 +1,6 @@
 package com.adioss.security.certificate;
 
+import java.net.URI;
 import java.security.cert.X509Certificate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,7 +32,7 @@ class OCSPChecker {
                 .getExtension(new ObjectIdentifier(CERTIFICATE_AUTHORITY_INFORMATION_ACCESS_OID));
         LOG.info("Check over OCSP server: " + extension.getAccessDescriptions());
 
-        OCSP.RevocationStatus check = OCSP.check(toCheck, checker);
+        OCSP.RevocationStatus check = OCSP.check(toCheck, checker, new URI("http://ocsp.digicert.com"), null, null);
         OCSP.RevocationStatus.CertStatus certStatus = check.getCertStatus();
         return certStatus == GOOD;
     }
