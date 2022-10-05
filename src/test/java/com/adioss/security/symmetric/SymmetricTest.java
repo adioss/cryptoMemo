@@ -70,7 +70,7 @@ public class SymmetricTest {
         int iterationCount = 100000;
         byte[] salt = new byte[16];
         SECURE_RANDOM.nextBytes(salt);
-        byte[] iv = new byte[16];
+        byte[] iv = new byte[12];
         SECURE_RANDOM.nextBytes(iv);
         String password = "my_pass";
 
